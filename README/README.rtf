@@ -1,0 +1,430 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf130
+{\fonttbl\f0\fnil\fcharset0 Cambria;\f1\froman\fcharset0 TimesNewRomanPSMT;}
+{\colortbl;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid101\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{lower-alpha\}.}{\leveltext\leveltemplateid102\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid201\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{lower-alpha\}.}{\leveltext\leveltemplateid202\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid301\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{lower-alpha\}.}{\leveltext\leveltemplateid302\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listname ;}\listid4}
+{\list\listtemplateid5\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid401\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{lower-alpha\}.}{\leveltext\leveltemplateid402\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listname ;}\listid5}
+{\list\listtemplateid6\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid501\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc4\levelnfcn4\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{lower-alpha\}.}{\leveltext\leveltemplateid502\'02\'01.;}{\levelnumbers\'01;}\fi-360\li1440\lin1440 }{\listname ;}\listid6}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}{\listoverride\listid5\listoverridecount0\ls5}{\listoverride\listid6\listoverridecount0\ls6}}
+\margl1440\margr1440\vieww19460\viewh15000\viewkind0
+\deftab720
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0\b\fs48 \cf0 README for Dr.seq(v1.0)\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs28 \cf0 Time-stamp: <2015-12-07 Sheng\'92en Hu>\
+\pard\pardeftab720\ri720\partightenfactor0
+
+\fs24 \cf0 Tarelahu@gmail.com\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f1 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0\b\fs36 \cf0 Introduction\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 Drop-seq has recently emerged as a powerful technology to analyze gene expression from thousands of individual cells simultaneously. Currently, Drop-seq technology requires refinement, and quality control (QC) steps are critical for such data analysis. There is a strong need for a convenient and comprehensive approach to obtain dedicated QC and to determine the relationships between cells for ultra-high-dimensional data sets.\
+We developed Dr.seq, a QC and analysis pipeline for Drop-seq data. By applying this pipe-line, Dr.seq provides four groups of QC measurements for given Drop-seq data, including reads level, bulk-cell level, individual-cell level and cell-clustering level QC. We assessed Dr.seq on simulated and published Drop-seq data. Both assessments exhibit reliable results. Overall, Dr.seq is a compre-hensive QC and analysis pipeline designed for Drop-seq data that is easily extended to other droplet-based data types. \
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs36 \cf0 Main propose\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 Dr.seq can generate detailed \ul quality control report\ulnone  and \ul analysis result\ulnone  of a Drop-seq sample, with 2 FASTQ files from a single sample inputted (reads file and barcode file)\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs36 \cf0 Install\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 Please check the file 'INSTALL' in the distribution.\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs36 \cf0 Usage of Drseq\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 ### If you type any following command without parameters, you will see a full description of command line options\
+\
+Drseq.py [-h] [--version]\
+           \{gen, run, simple\}\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs28 \cf0 Standard mode (gen, run)
+\f1 \
+\pard\pardeftab720\li720\fi-360\ri1060\partightenfactor0
+\ls1\ilvl0
+\f0 \cf0 1.	Run command: $] Drseq.py gen \'96n configFile.conf
+\f1 \
+\ls1\ilvl0
+\f0 2.	Edit \'93configFile.conf\'94 to change parameter and fill in data path
+\f1 \
+\ls1\ilvl0
+\f0 3.	Run command: $] Drseq.py run \'96c configFile.conf
+\f1 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0\b\fs28 \cf0 Simple mode (simple)
+\f1 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 \
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0\b \cf0 Drseq.py gen \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0 \cf0 usage: Drseq.py gen [-h] -n CONFIG_NAME\
+\
+Generate a config file for Dr.seq\
+\
+optional arguments:\
+  -h, --help            show this help message and exit\
+  -n CONFIG_NAME, --name CONFIG_NAME\
+                        name of your config file : config_name.conf\
+\
+Description:\
+This is the first step of standard mode of Dr.seq. To run Dr.seq pipeline, first you create a config file demo with all default parameter set inside (with this command, for example: Drseq.py gen \'96n you_config_name.conf). After you create the config file, you can change any parameter you want according to the direction in the config file. You can also specific the template config file when you install the pipeline (see the INSTALL document for more details.). Some of parameters already had default value (generally the default parameter is the one we suggest) but some major ones are blank, including file location of reads file and barcode file, output directory and output name. User should fill in these parameter lines to make sure Drseq run successfully. Note that some parameters can only be chosen from 0/1/2 or other specific number to turn on/off some functions. See more details from the note in the config file (demo or the one you generated)\
+\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b \cf0 Drseq.py run \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0 \cf0 usage: Drseq.py run [-h] -c CONFIG [-f] [--clean]\
+\
+Run Drseq with a completed config file input\
+\
+optional arguments:\
+  -h, --help            show this help message and exit\
+  -c CONFIG, --config CONFIG\
+                        specify the config file, -c config_name.conf\
+  -f, --force_overwrite\
+                        The pipeline will over write output result if the\
+                        output folder is already exist\
+  --clean               remove intermediate result generated during\
+                        Dr.seq,default is YES\
+\
+Description:\
+This is the second step of the standard mode. After you complete a config file by generating and editing. Now what you need to do is to run Dr.seq with this config file. This is an easy step and you just need to type \
+$] Drseq.py run \'96c your_completed_config_file.conf\
+to start Dr.seq. Dr.seq take time with all function turned on, so we suggest running Dr.seq in the background. User can also turn off some time consuming step to speed up. And what you need to do now is to take a sleep and get your result tomorrow morning.  \
+\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b \cf0 Drseq.py simple \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f1\b0 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0 \cf0 usage: Drseq.py simple [-h] -b BARCODE -r READS -n NAME -s \{hg38,mm10\} [-f]\
+                       [--cellbarcodelength CBL] [--umilength UMIL] [-g GA]\
+                       [--mapindex MAPINDEX] [--thread P] [--clean]\
+\
+Run Drseq pipeline using simple mode/command line mode. Usage: Drseq.py -a\
+barcode.fastq -b reads.fastq -n outname -s mm10 -g mm10_refgenes.txt\
+--mapindex /yourmapindexfolder/mm10.star\
+\
+optional arguments:\
+  -h, --help            show this help message and exit\
+  -b BARCODE, --barcode BARCODE\
+                        [required] barcode fastq file before any filtering\
+                        step, only accept .fastq format\
+  -r READS, --reads READS\
+                        [required] reads fastq file, accept raw fastq input or\
+                        aligned sam format, format(fastq,sam) fixed by\
+                        extension(.fastq or .sam)\
+  -n NAME, --name NAME  [required] name of you config file and output dir,\
+                        name only , no extension\
+  -s \{hg38,mm10\}, --species \{hg38,mm10\}\
+                        [required] species ,choose from hg38 and mm10\
+  -f, --force_overwrite\
+                        specify the config file to create output folder , this\
+                        cmd will rm existing result if set True ~!!\
+  --cellbarcodelength CBL\
+                        specify the length of yoru cell barcode , default is\
+                        12, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)\
+  --umilength UMIL      specify the length of yoru UMI , default is 8,\
+                        12(cellbarcode) + 8(umi) = 20 (barcodefastq)\
+  -g GA, --gene_annotation GA\
+                        [required if you didn't specific it in template config\
+                        file] gene annotation file, the annotation file can be\
+                        download from UCSC, full annotation text format(see\
+                        documents for detail), or users can download gene\
+                        annotation file in hg38 and mm10 version from our\
+                        homepage\
+  --mapindex MAPINDEX   [required if you didn't specific it in template config\
+                        file] mapping index folder, there should be a\
+                        mm10.star folder under mapindex folder if you use STAR\
+                        to map to mm10 genome, mm10.bowtie2 folder if use\
+                        bowtie2. for bowtie2, the index file should named like\
+                        mm10.1.bt2(see README for detail)\
+  --thread P            number of alignment threads to launch, ignored for sam\
+                        input\
+  --clean               remove intermediate result generated during\
+                        Dr.seq,default is YES\
+\
+Description:\
+Simple mode (lazy mode) for users who don\'92t want to generate, edit and run config files for each Drop-seq data. Users can easily run Dr.seq with simple command line with Dr.seq simple mode. You just need to type Drseq.py simple and specify major command in the command line, and Dr.seq will generate, edit and run a config file automatically. Note that many minor parameter and function can only take default value with this simple mode.\
+\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs36 \cf0 Parameter description\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0\fs24 \cf0 We wrote detailed description under each parameter in config file for users convenience when editing the config file. In general, we suggest user to edit the congfie template before installation. For example, users can specify the server location of gene annotation and mapping index. Also users can specify the parameter if they don't like the default one. And they don\'92t need to change it every time they run the pipeline. \
+The most convenient way we suggest is: \
+\pard\pardeftab720\li720\fi-360\ri1060\partightenfactor0
+\ls2\ilvl0\cf0 1.	Specific following parameter in the template config file before installation (see INSTALL document)\
+\pard\pardeftab720\li1440\fi-360\ri1060\partightenfactor0
+\ls2\ilvl1\cf0 a.	gene_annotation
+\f1 \
+\ls2\ilvl1
+\f0 b.	genome_version\
+c.	mapping_software_main
+\f1 \
+\ls2\ilvl1
+\f0 d.	mapindex
+\f1 \
+\ls2\ilvl1
+\f0 e.	other minor parameter if you don\'92t like the default\
+\pard\pardeftab720\li720\fi-360\ri1060\partightenfactor0
+\ls2\ilvl1\cf0 2.	Leave following parameter blank in the template config and edit them every time you run the pipeline.\
+\pard\pardeftab720\li1440\fi-360\ri1060\partightenfactor0
+\ls2\ilvl1\cf0 a.	barcode_file\
+b.	reads_file\
+c.	outputdirectory\
+d.	outname\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f1 \cf0 \
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0\b \cf0 Following is detailed description of each parameter
+\f1 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b0 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0 \cf0 [General]\
+\
+\
+barcode_file = mouseRetina_1.fastq \
+# One of the two major input of Dr.seq.  FASTQ format file containing barcode information of every reads. Dr.seq only accepts FASTQ file as barcode file input. By default, every barcode in FASTQ file consist of 20 bp including 12bp cell barcodes(1-12bp) and 8bp UMIs(13-20bp). cell barcode should locate before UMI, the length of cell barcode and UMI can be defined below\
+cell_barcode_length = 12\
+umi_length = 8 \
+#Length of cell barcode and UMI, (see the description of barcoe_file). by default they are 12,8\
+\
+reads_file = mouseRetina_2.fastq\
+#One of two major input of Dr.seq, accept raw sequencing file (FASTQ format) or aligned file(SAM), file type is specified by extension. (regard as raw file and add mapping step if the extension is .fastq, regard as aligned file and remove mapping step if .sam). Note that sam file should be with header\
+\
+outputdirectory = /mnt/Storage3/home/huse/Dropseq/mouseRetina/\
+#(Absolute path) Main directory for output results. Default is current directory "." if user left it blank, but not recommended\
+\
+outname = mouseRetina\
+# Name of all your output results, your QC report will be named as outname_summary.pdf\
+\
+gene_annotation = /mnt/Storage3/home/huse/Dropseq/Drseq_data/refgenes/mm10_refgenes.txt\
+#(Absolute path) gene model in full text format, download from UCSC genome browser (table browser), refseq version recommended.\
+#the figure below shows the detail to download gene model. (http://genome.ucsc.edu/cgi-bin/hgTables)\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f1 \cf0 #see the additional figure \'93gene_annotation_download.png\'94 in the same folder for reference.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\f0 \cf0 genome_version = mm10 \
+#Genome version (default: mm10), should be corresponded to your gene_annotation file \
+\
+dryrun = 0\
+#Only print cmd with out processing if dryrun =1, default is 0. \
+\
+png_for_dot = 0\
+#This parameter only works for dotplots in individual cell QC. Set 1 to plot dotplots in individual cell QC in PNG format, otherwise they will be plotted in PDF format. The format of other plots are fixed to PDF, because their file size is much smaller.  \
+\
+\
+[Step1_Mapping]\
+\
+\
+mapping_software_main = STAR\
+### location of your mapping software, choose from STAR and bowtie2 (case sensitive), if you already install STAR(bowtie2) in your default path, type STAR directly, otherwise input absolute path of STAR(bowtie2)\
+\
+mapping_p = 8\
+### number of alignment threads to launch\
+\
+mapindex = /mnt/Storage3/home/huse/Dropseq/Drseq_data/refgenes/mapping_index/\
+### Mapping index of your alignment tool, absolute path, \
+#  Mapping index should be built before you run this pipeline, note that STAR and bowtie2 use different index type(see STAR/bowtie2 document for more details.). \
+#  User should prepare sub-folders with specific name under mapindex folder, for STAR, folder should look like mm10.star, for bowtie2, mm10.bowtie2\
+#  Folder name and suffix should be fixed like example suggested and case sensitive\
+#  For bowtie2 index folder, the name of index should only contain genome version, /mnt/Storage3/home/huse/Dropseq/Drseq_data/mapping_index/mm10.bowtie2/mm10.1.bt2\
+#  eg:  /mnt/Storage3/home/huse/Dropseq/Drseq_data/mapping_idnex/mm10.star\
+#  eg: /mnt/Storage3/home/huse/Dropseq/Drseq_data/ mapping_index/mm10.bowtie2\
+\
+samtools_main = samtools\
+### Location of your samtools, type "samtools" here if installed in default path, other wise type absolute path of samtools\
+\
+q30filter = 1\
+### Use q30 criteria to filter reads in SAM file, choose from 0/1\
+### Add a filter (q=30) with minimum mapping quality, set this parameter to 1(default) to turn on this option, set 0 to turn off\
+\
+\
+[Step2_ExpMat]\
+\
+\
+filterttsdistance = 0\
+### Whether discard reads far away from TTS (transcript terminal site), set filterttsdistance = 1 to turn on this function, default is not use,  \
+\
+ttsdistance = 400\
+### Default filter distance is 400bp, only take effect when filterttsdistance = 1 is set\
+\
+covergncutoff = 100\
+### Build-in parameter, only output cell barcode with more than 100(default) genes covered, for following analysis and QC report \
+### Note that this parameter is only for visualization of QC report and convenience of following analysis, because too many cell barcodes will influence users' interpretation of the QC report.\
+### Users can change this parameter when the drop-seq sample don't have enough coverage/read depth\
+### to determine "real cells" from cell_barcodes for clustering, users can change parameter in [Step4_Analysis] "covergncluster"\
+\
+duplicate_measure = 1\
+### Method to consider duplicate reads in each cell barcode, \
+# 1 (default): duplicate reads have same UMI and same genomic location(position and strand)\
+# 2: same umi only\
+# 3: same genomic location only\
+# 0: do not remove duplicate reads (keep all) \
+umidis1 = 0\
+### By default this function is turned off\
+### Only take effect when duplicate_measure = 1 or 2, ignore this parameter if duplicate_measure = 0 or 3\
+## Set 1 to turn on this combination, set 0(default) to turn off\
+# Set 1: if two reads have same cell barcode and genomic location(chrom, position, strand) and their UMI distance <= 1, regard them as same reads\
+# Set 0(default) : regard them as same reads only when their UMI distance = 0 and have same cell barcode and genomic location \
+ \
+\
+[Step3_QC]\
+\
+\
+bulk_qc = 1\
+# User can choose to skip bulk qc step because of the time consuming problem. 0 means do not conduct bulk qc, 1 means conduct bulk qc(time consuming)\
+\
+gb_cover = geneBody_coverage.py \
+read_gc = read_GC.py\
+read_nvc = read_NVC.py\
+read_qul = read_quality.py\
+### Reference part of RseQC(Want et al., Bioinformatics, 2012), type the installed location of each script or just fill in filename if RseQC has been installed under default path\
+### RseQC should be installed before you run this pipeline. after you install RseQC , input the location(or absolute location) of the four required part\
+\
+# below is individual qc parameter\
+select_cell_measure = 1\
+### Method to select real cells from cell barcodes, choose from 1 or 2\
+## 1 (default): cell barcodes with more than 1000 genes covered are selected as real cells for following analysis including dimensional reduction and clustering, cutoff of covered gene number(1000, default) is determined in parameter "covergncluster"\
+## 2: top 1000 cell harcodes with highest umi count will be selected as real cells, number of highest UMI cell (1000, default) is determined in parameter "topumicellnumber". Suitable for Drop-seq sample with known cell number\
+\
+covergncluster = 1000 \
+### Cell barcodes with more than 1000(default) genes covered will be selected as STAMP barcodes for clustering\
+### this parameter takes effect only when "select_cell_measure" is set to 1\
+\
+topumicellnumber = 1000\
+### Top 1000(default) cell barcodes with highest UMI count will be selected as cells for clustering\
+### This parameter takes effect only when "select_cell_measure" is set to 2\
+\
+remove_non_dup_cell = 1\
+### a group of cell_barcodes have almost no duplicate reads, which show clearly different pattern from real cells, we set an option to remove these cell barcodes for analysis step.\
+### Choose from 0 or 1, set 1(default) to turn on this function(remove non dup cell barcodes), set 0 to turn off(keep non dup cell barcodes)\
+\
+non_dup_cutoff = 0.1\
+### Cutoff of non-duplicate cell barcode, a cell barcode will be defined as non-duplicate cell barcode if its duplicate rate < 0.1. Duplicate rate for each cell barcode is defined as (#total_reads - #UMI)/#total_reads\
+\
+\
+\
+[Step4_Analysis]\
+\
+### Dimensional reduction step\
+highvarz = 1.64\
+### Cutoff for highly variable gene selection. in the first step we divide all genes to 20 groups based on average expression level across all individual cells. Then in each group we select genes whose z-normalized CV (variance/mean) >= 1.64 (default, corresponding to pvalue =0.05) \
+\
+selectpccumvar = 0.5\
+### Select top PCs until they explain 50% (0.5, default,  0.3 for 30% variance) of total variance. Then conduct 2 dimensional t-SNE based on selected PC\
+\
+pctable = 1\
+### Choose from 0 (default) and 1, you can turn on this function(set 1) to output a 2 column table for PC1 v.s PC2\
+### This parameter is designed for users who prefer and conduct following analysis based on PCA output, generally we don't use\
+## 0(default): do not output PCA result, only output PCA + 2 dimensional t-SNE result \
+## 1: output PC1 v.s. PC2 table in addition to t-SNE result.\
+\
+cortable = 1\
+### Choose from 0 (default) and 1, you can turn on this function(set 1) to output a cell to cell correlation matrix\
+### Correlation is based on log scale TPM (transcript per million reads). \
+### Users can turn on this function to generate cell to cell correlation matrix for custom analysis\
+\
+clustering_method = 1\
+### method for cluster cells based on t-SNE result\
+### choose from 1(default) ,2 ,3 and 4.\
+### 1(default) : k-means, use Gap statistics followed by our "first stable Gap" method to determine k, see document for more details\
+### 2: k-means, but use Gap statistics followed by traditional "Tibs2001SEmax" method to determine k (Tibshirani et al (2001))\
+### 3: k-means with custom determined k, k value is defined in following parameter "custom_k", this option is designed for users who know the number of subgroup of the drop-seq sample\
+### 4: (make sure your R environment has library "fpc" installed) use DBSCAN  as clustering method, the (eps) parameter is defined in following parameter "custom_d"\
+\
+maxknum = 100\
+### Maximum k number for gap statistics, only take effect when clustering_method = 1 or 2\
+\
+custom_k = 5\
+### Only take effect when clustering_method = 3, cells will be clustered to N group based on t-SNE result according to user determined k\
+\
+custom_d = 2\
+### Only take effect when clustering_method = 4, its the parameter "eps"(Reachability distance, see Ester et al. (1996)) of DBSCAN\
+### by default we set it to 2 according to the orginal Drop-seq paper, but it varies a lot between different datasets.\
+\
+rdnumber = 1007\
+### Set initial random number to keep your result reproducible  \
+\
+\
+\
+\
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\b\fs36 \cf0 Output files\
+\
+\pard\pardeftab720\li740\fi-380\ri1060\partightenfactor0
+\ls3\ilvl1
+\b0\fs28 \cf0 1.	QC report (pdf format, see demo.pdf in the package)
+\f1 \
+\ls3\ilvl1
+\f0 2.	Expression matrix for STAMP barcodes.\
+\pard\pardeftab720\li740\ri1060\partightenfactor0
+\cf0 In Drop-seq experiment there are millions of cell barcodes generated, but most of them don\'92t contain transcriptome though they still contain some garbage RNA sequenced. Only a very little number of cell barcodes correspond with single cell transcriptome. In the expression matrix we only report transcriptome of these cell barcodes (call STAMP barcode). Expression matrix is a big table in plain text format, whose rows represent each gene and columns represent each selected STAMP barcodes.
+\f1 \
+\pard\pardeftab720\li740\fi-380\ri1060\partightenfactor0
+\ls4\ilvl1
+\f0 \cf0 3.	QC measurements for STAMP barcodes\
+\pard\pardeftab720\li740\ri1060\partightenfactor0
+\cf0 Similar like 3 but in this table we only show QC measurements (column) of STAMPs (row). Measurements include mappable reads, uniq reads, covered gene number, intron rate and other information. \
+\pard\pardeftab720\li740\fi-380\ri1060\partightenfactor0
+\ls5\ilvl1\cf0 4.	Dimensional reduction and clustering result for STAMP barcodes\
+\pard\pardeftab720\li740\ri1060\partightenfactor0
+\cf0 In the analysis step we conduct a t-SNE dimensional reduction and clustering with automatically determined cluster number. We print these information to the table for users further analysis.  \
+\pard\pardeftab720\li740\fi-380\ri1060\partightenfactor0
+\ls6\ilvl1\cf0 5.	Other optional outputs. \
+\pard\pardeftab720\li740\ri1060\partightenfactor0
+\cf0 Dr.seq can also output PCA dimensional result and paired wise correlation matrix of selected STMAPs in case not all users prefer the default t-SNE method. 
+\f1 \
+\pard\pardeftab720\ri1060\partightenfactor0
+\cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
+
+\fs24 \cf0 \
+}

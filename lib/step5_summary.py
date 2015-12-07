@@ -445,7 +445,7 @@ Intron rate is a effective method to measure the quality of a RNA-seq sample. We
 """%(conf_dict['QCplots']['covergn'],
      conf_dict['QCplots']['intronrate'])
     
-    if int(conf_dict['Step4_Analysis']['clustering_method']) == [3,4]:
+    if int(conf_dict['Step4_Analysis']['clustering_method']) in [3,4]:
         pass
     else:
         if int(conf_dict['Step4_Analysis']['clustering_method']) in [1,2]:

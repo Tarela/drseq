@@ -347,10 +347,16 @@ gap_plot <- paste(outname,'_GapStat.pdf',sep="")
 cluster_plot <- paste(outname,'_cluster.pdf',sep="")
 if (clustering_method == 4){
     ### if user choose dbscan
-    library(fpc)
+    if(!require(fpc)) {
+	    install.packages("fpc")
+	    library(fpc)
+    }
     final_result <- givenE_dbscan(tsne_result,custom_d,cluster_plot)
 }else{
-    library(cluster)
+    if(!require(cluster)) {
+	    install.packages("cluster")
+	    library(cluster)
+    }
     ### if user choose kmeans
     ## different method to decide k
     if(clustering_method == 1){

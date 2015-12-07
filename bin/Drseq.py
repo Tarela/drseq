@@ -84,27 +84,27 @@ def parse_args():
     simple_parser = sub_parsers.add_parser("simple", help = "run Drseq using simple mode",
                                          description = "(Run Drseq pipeline using simple mode/command line mode) Usage: Drseq.py -a barcode.fastq -b reads.fastq -n outname -s mm10 -g mm10_refgenes.txt --mapindex /yourmapindexfolder/mm10.star")
     simple_parser.add_argument("-b","--barcode", dest = 'barcode',required = True,
-                             help = "barcode fastq file before any filtering step, only accept .fastq format" )
+                             help = "[required] barcode fastq file before any filtering step, only accept .fastq format" )
     simple_parser.add_argument("-r","--reads",dest='reads',required = True,
-                             help = "reads fastq file, accept raw fastq input or aligned sam format, format(fastq,sam) fixed by extension(.fastq or .sam)" )
-    simple_parser.add_argument("-n","--name", dest="name",required = True,help="name of you config file and output dir, name only , no extension")
+                             help = "[required] reads fastq file, accept raw fastq input or aligned sam format, format(fastq,sam) fixed by extension(.fastq or .sam)" )
+    simple_parser.add_argument("-n","--name", dest="name",required = True,help="[required] name of you config file and output dir, name only , no extension")
     simple_parser.add_argument("-s","--species",  choices = ("hg38", "mm10"), required = True,
-                             help = "species ,choose from hg38 and mm10" )
+                             help = "[required] species ,choose from hg38 and mm10" )
     simple_parser.add_argument("-f","--force_overwrite",dest='fover',  default=False, action='store_true', 
                              help = "specify the config file to create output folder , this cmd will rm existing result if set True ~!! " )
     simple_parser.add_argument("--cellbarcodelength",dest='CBL' ,default='12', 
-                             help = "specify the length of yoru cell barcode , default is 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
+                             help = "specify the length of yoru cell barcode , default is 12, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("--umilength",dest='UMIL',  default='8', 
-                             help = "specify the length of yoru UMI , default is 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
+                             help = "specify the length of yoru UMI , default is 8, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("-g","--gene_annotation",dest='GA', required = False,
-                             help = "gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
+                             help = "[required if you didn't specific it in template config file] gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
     simple_parser.add_argument("--mapindex",dest='mapindex',required = False,
-                             help = "mapping index folder, there should be a mm10.star folder under mapindex folder if you use STAR to map to mm10 genome, mm10.bowtie2 folder if use bowtie2. for bowtie2, the index file should named like mm10.1.bt2(see documents for detail)" )
+                             help = "[required if you didn't specific it in template config file] mapping index folder, there should be a mm10.star folder under mapindex folder if you use STAR to map to mm10 genome, mm10.bowtie2 folder if use bowtie2. for bowtie2, the index file should named like mm10.1.bt2(see documents for detail)" )
     simple_parser.add_argument("--thread",dest='P' ,default='8', 
                              help = "number of alignment threads to launch, ignored for sam input" )
     simple_parser.add_argument("--clean",dest='Clean' , default=True, action='store_true',
                              help = "remove intermediate result generated during Dr.seq,default is YES" )
-    
+        
     
     args = parser.parse_args()
     ## generate config file template 
