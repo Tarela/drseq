@@ -28,9 +28,11 @@
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1\b0\fs24 \cf0 \
+\pard\pardeftab720\ri720\partightenfactor0
 
-\f0 Python version must be equal to 2.7 to run Dr.seq.\
-\
+\f0 \cf0 We recommend to use python version 2.7 to run Dr.seq\
+\pard\pardeftab720\ri1060\partightenfactor0
+\cf0 \
 1. Some build-in python libraries are required:\
 \pard\pardeftab720\li720\fi-360\ri1060\partightenfactor0
 \ls1\ilvl0\cf0 1.	ConfigParser
@@ -40,8 +42,9 @@
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 2. A python package called RseQC is required for bulk-cell level QC (you can turn off bulk-cell level QC if you don\'92t want to install RseQC)\
+\f0 \cf0 2. A python package called RseQC is required for bulk-cell level QC (you can turn off bulk-cell level QC if you don\'92t want to install RseQC)\
 \
 3. R (>=2.1) is required to run Dr.seq.\
 PDF and PNG file generation in R must be ensure. \
@@ -52,8 +55,9 @@ Some extension R libraries are required:\
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 4. Alignment tools are required if you want to use the alignment function of Dr.seq (we accept STAR and bowtie2 as aligner, you can also input .sam file to skip the alignment step)\
+\f0 \cf0 4. Alignment tools are required if you want to use the alignment function of Dr.seq (we accept STAR and bowtie2 as aligner, you can also input .sam file to skip the alignment step)\
 \
 5. samtools and bedtools are required\
 \
@@ -67,8 +71,9 @@ Some extension R libraries are required:\
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1\b0\fs24 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 You can download and update Dr.seq latest version from {\field{\*\fldinst{HYPERLINK "%22"}}{\fldrslt \cf2 \ul \ulc2 https://bitbucket.org/Tarela/drseq/}}
+\f0 \cf0 You can download and update Dr.seq latest version from {\field{\*\fldinst{HYPERLINK "%22"}}{\fldrslt \cf2 \ul \ulc2 https://bitbucket.org/Tarela/drseq/}}
 \f1 \
 \
 \
@@ -78,8 +83,9 @@ Some extension R libraries are required:\
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1\b0\fs24 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 Before you install Dr.seq, we suggest you to set default parameter (including the path of your annotation file, mapping index and path of major software.) To set default parameter:\
+\f0 \cf0 Before you install Dr.seq, we suggest you to set default parameter (including the path of your annotation file, mapping index and path of major software.) To set default parameter:\
 \pard\pardeftab720\li720\fi-360\ri1060\partightenfactor0
 \ls3\ilvl0\cf0 1.	Find the template of configure file under \'93lib/Config/\'94 of this package\
 2.	Set default parameter in the template configure file (PLEASE don\'92t change the name of template file and change or delete the name of any parameter)\
@@ -97,8 +103,9 @@ Some extension R libraries are required:\
 \pard\pardeftab720\ri1060\partightenfactor0
 
 \f1\b0\fs24 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 Dr.seq uses Python's distutils tools for source installations. To install a source distribution of Dr.seq, unpack the distribution tarball and open up a command terminal. Go to the directory where you unpacked Dr.seq, and simply run the install script:\
+\f0 \cf0 Dr.seq uses Python's distutils tools for source installations. To install a source distribution of Dr.seq, unpack the distribution tarball and open up a command terminal. Go to the directory where you unpacked Dr.seq, and simply run the install script:\
 \
 $ python setup.py install\
 By default, the script will install python library and executable codes globally, which means you need to be root or administrator of the machine so as to complete the installation. Please contact the administrator of that machine if you want their help. If you need to provide a nonstandard install prefix, or any other nonstandard options, you can provide many command line options to the install script. Use the \'96help option to see a brief list of available options:\
@@ -117,16 +124,19 @@ To set up your PYTHONPATH environment variable, you'll need to add the value PRE
 On Linux, using bash, I include the new value in my PYTHONPATH by adding this line to your ~/.bashrc:\
 \
 $ export PYTHONPATH=~/bin/lib/python2.7/site-packages:$PYTHONPATH\
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f1 \
+\f1 \cf0 \
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f0 Using Windows, you need to open up the system properties dialog, and locate the tab labeled Environment. Add your value to the PYTHONPATH variable, or create a new PYTHONPATH variable if there isn't one already.\
+\f0 \cf0 Using Windows, you need to open up the system properties dialog, and locate the tab labeled Environment. Add your value to the PYTHONPATH variable, or create a new PYTHONPATH variable if there isn't one already.\
 \
 PATH\
 \
 Just like your PYTHONPATH, you'll also need to add a new value to your PATH environment variable so that you can use the Dr.seq command line directly. Unlike the PYTHONPATH value, however, this time you'll need to add PREFIX/bin to your PATH environment variable. The process for updating this is the same as described above for the PYTHONPATH variable:\
 \
 $ export PATH=/usr/bin/:$HOME/bin/bin:$PATH\
+\pard\pardeftab720\ri1060\partightenfactor0
 
-\f1 \
+\f1 \cf0 \
 }

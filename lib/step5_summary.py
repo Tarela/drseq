@@ -76,7 +76,7 @@ def step5_summary(conf_dict,logfile):
 \usepackage{color}
 \DeclareGraphicsExtensions{.eps,.png,.pdf,.ps}
 \\begin{document}
-\\title{QC and analysis reprots for drop-seq data : %s}
+\\title{QC and analysis reports for Drop-seq data : %s}
 
 \\vspace{-1cm}
 \maketitle
@@ -85,7 +85,7 @@ def step5_summary(conf_dict,logfile):
 \\newpage
 \section{Data description}
 \\begin{quotation}
-Table 1 mainly describe the input file and major parameter, including genome annotation, mapping solution and major options.
+Table 1 mainly describe the input file and major parameters, including genome annotation, mapping solution and major options.
 \end{quotation}
 \\begin{table}[h]
 \caption{Data description}\label{bstable}
@@ -134,7 +134,7 @@ UMI length & %s \\\\
 \hline
 mapping software & %s \\\\
 \hline
-Q30filter mapped reads & %s \\\\
+Q30 filter mapped reads & %s \\\\
 \hline
 remove reads away TTS & %s \\\\
 \hline
@@ -168,9 +168,9 @@ remove reads away TTS & %s \\\\
 merge UMI ED = 1 & %s \\\\ 
 \hline"""%(umidis1)
     QCdoc += """
-conduct bulk cell QC & %s \\\\
+conduct bulk-cell level QC & %s \\\\
 \hline
-conduct individual cell QC & True \\\\
+conduct individual-cell level QC & True \\\\
 \hline """%(bulk_qc)
     if  int(conf_dict['Step3_QC']['select_cell_measure']) == 1:
         QCdoc += """
@@ -181,11 +181,11 @@ select STAMPs & %s covered gene \\\\
 select STAMPs & top %s UMI count \\\\
 \hline"""%(str(conf_dict['Step3_QC']['topumicellnumber']))
     QCdoc += """
-remove non-duplicate cell & %s \\\\ 
+remove low duplicate rate cell & %s \\\\ 
 \hline """%(rmnodup)
     if  rmnodup == "True":
         QCdoc += """
-non-duplicate cutoff & %s  \\\\
+low duplicate rate cutoff & %s  \\\\
 \hline"""%(str(conf_dict['Step3_QC']['non_dup_cutoff']))
     QCdoc += """
 z-score for highly variable gene & %s \\\\ 
@@ -266,7 +266,7 @@ Distribution of GC content of each read.
 \\newpage
 \\newpage
 \section{Bulk-cell level QC}
-In the bulk-cell level QC step we measured the performance of total Drop-seq reads. In this step we did't separate cell or remove ``empty" cell barcode, just like treat the sample as bulk RNA-seq sample.
+In the bulk-cell level QC step we measured the performance of total Drop-seq reads. In this step we did't separate cell or remove ``empty" cell barcodes, just like treated the sample as bulk RNA-seq sample.
 \subsection{Reads alignment summary}
 \\begin{quotation}
 The following table shows mappability and distribution of total Drop-seq reads. Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. \\\\
@@ -321,7 +321,7 @@ intergenic UMI count & %s (%s\\%%)** \\\\
 \\newpage
 \subsection{Gene body coverage}
 \\begin{quotation}
-Aggregate plot of reads coverage on all genes. Theoretically we observed a unimodal(single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end because of the CEL-seq like protocol used in sequencing cDNA library. (Klein, A.M., et al. (2015) )
+Aggregate plot of reads coverage on all genes. Theoretically we observe a unimodal(single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end because of the CEL-seq like protocol used in sequencing cDNA library. (Klein, A.M., et al. (2015) )
 \end{quotation}
 \\begin{figure}[h]
         \caption{Gene body coverage} \label{fig:profileunion}
@@ -340,7 +340,7 @@ Aggregate plot of reads coverage on all genes. Theoretically we observed a unimo
 In this step we focused on the quality of individual cell and distinguishing cell barcodes from STAMPs (single-cell transcriptomes attached to microparticles)
 \subsection{Reads duplicate rate distribution}
 \\begin{quotation}
-Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. Here we plotted the distribution of duplicate rate in each cell barcode (Though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following step. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate.
+Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. Here we plotted the distribution of duplicate rate in each cell barcode (Though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate.
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads dupliate rate distribution} \label{fig:profileunion}
@@ -401,7 +401,7 @@ Reads duplicate rate versus cumulative UMI count. Cell barcodes were ranked by t
 \\newpage
 \subsection{UMI vs. covered gene number}
 \\begin{quotation}
-Covered gene number was plotted as a function of the number of UMI (i.e. unique read). We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis.Note that we use only STAMPs selected in this step for following analysis. The other cell barcodes are discarded. 
+Covered gene number was plotted as a function of the number of UMI (i.e. unique read). We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis.Note that we used only STAMPs selected in this step for following analysis. The other cell barcodes were discarded. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{UMI v.s. covered gene number} \label{fig:profileunion}
@@ -474,12 +474,12 @@ We conducted a k-means clustering based on t-SNE dimentional reduction output. G
     QCdoc += """
 \\newpage
 \\newpage
-\subsection{Cluster plot}
+\subsection{Clustering plot}
 \\begin{quotation}
 Scatter plot represented visualization of t-SNE dimensional reduction output of selected STAMP barcodes. STAMP barcodes were colored according to the clustering result and cluster numbers were printed in the center of each cluster. 
 \end{quotation}
 \\begin{figure}[h]
-        \caption{Cluster plot} \label{fig:profileunion}
+        \caption{Clustering plot} \label{fig:profileunion}
         \setlength{\\abovecaptionskip}{0pt}
         \setlength{\\belowcaptionskip}{10pt}
         \centering
@@ -544,13 +544,13 @@ summary QC report & %s \\\\
 
     if conf_dict['clean']:
         wlog('clean pararmeter was turned on, remove internal files',logfile)
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_symbol.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_cds.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_3utr.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_5utr.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_TTSdis.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_combined.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s %s"%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_barcode_reform.txt'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_symbol.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_cds.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_3utr.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_5utr.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_TTSdis.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_combined.bed'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_barcode_reform.txt'),logfile,conf_dict['General']['dryrun'])
 
     for files in os.listdir(summarydir):
         if os.path.isfile(files) and files[-12:-4] == "_summary":

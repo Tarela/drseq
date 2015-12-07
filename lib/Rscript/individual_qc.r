@@ -22,7 +22,7 @@ names(duprate) <- row.names(qcdata)
 #nodup_cell <- names(duprate)[which(duprate < non_dup_cutoff)]
 
 pdf(file=paste(outname,"_duprate.pdf",sep=""))
-hist(duprate,breaks=200,border="blue",xlab="(#mappable reads-#UMI)/#mappable reads",freq=T,main="")
+hist(duprate,breaks=200,border="blue",xlab="Reads duplicate rate\n(#mappable reads-#UMI)/#mappable reads",freq=T,main="")
 abline(v=non_dup_cutoff,col="darkblue",lwd=3)
 legend("top",lwd=3,col="darkblue",legend="cutoff of cell barcodes\nwith low duplcate rate",bty="n",cex=1.2)
 dev.off()
@@ -56,13 +56,13 @@ if(measure == 1){
     if(remove_nondup == 1){
         points(qc2matrix[which(duprate < non_dup_cutoff),],pch=".",col="blue")
         points(qc2matrix[which(coverGN >= measure_cutoff & duprate >= non_dup_cutoff),],pch=".",col="purple")
-        legend("topleft",legend=c("normal duprate cell_barcode","non duprate cell_barcode","cell selected for clustering\n(normal dup + high covered)"),col=c("red","blue","purple"),bty="n",lwd=3,cex=1.2)
+        legend("topleft",legend=c("normal duplicate rate cell barcodes","low duplicate rate cell barcodes","cell selected for clustering\n(normal dup + high covered)"),col=c("red","blue","purple"),bty="n",lwd=3,cex=1.2)
         # here cluster_cell_name is selected clustering cells 
         cluster_cell_name <- row.names(qc2matrix[which(coverGN >= measure_cutoff & duprate >= non_dup_cutoff),])
     ### not remove non-duplicate cell_barcode
     }else{
         points(qc2matrix[which(coverGN >= measure_cutoff),],pch=".",col="purple")
-        legend("topleft",legend=c("cell_barcode","STAMP barcodes\n(high covered gene number)"),col=c("red","purple"),bty="n",lwd=3,cex=1.2)
+        legend("topleft",legend=c("cell barcode","STAMP barcodes\n(high covered gene number)"),col=c("red","purple"),bty="n",lwd=3,cex=1.2)
         cluster_cell_name <- row.names(qc2matrix[which(coverGN >= measure_cutoff),])
     }
     abline(h=log10(measure_cutoff))
@@ -71,7 +71,7 @@ if(measure == 1){
     if(remove_nondup == 1){
         points(qc2matrix[which(duprate < non_dup_cutoff),],pch=".",col="blue")
         points(qc2matrix[which(umi >= umicutoff & duprate >= non_dup_cutoff),],pch=".",col="purple")
-        legend("topleft",legend=c("normal duprate cell barcode","low duplicate cellbarcode","cell selected for clustering\n(normal dup + highest umi counts)"),col=c("red","blue","purple"),bty="n",lwd=3,cex=1.2)
+        legend("topleft",legend=c("normal duprate cell barcodes","low duplicate cellbarcodes","cell selected for clustering\n(normal dup + highest umi counts)"),col=c("red","blue","purple"),bty="n",lwd=3,cex=1.2)
         cluster_cell_name <- row.names(qc2matrix[which(umi >= umicutoff & duprate >= non_dup_cutoff),])
     }else{
         points(qc2matrix[which(umi >= umicutoff),],pch=".",col="purple")
@@ -104,14 +104,14 @@ if(measure == 1){
     names(cs_coverGN) <- cell_coverGN_order
     cs_coverGN_mat <- cbind(seq(length(cs_coverGN)),(cs_coverGN)/nrow(expdata))
     duprate_mat <- cbind(seq(length(cs_coverGN)),(duprate[names(cs_coverGN)]))
-    smoothScatter(duprate_mat,xlab="Cell barcodes ordered by covered gene number from high to low",ylab="Reads duplicate rate")
+    smoothScatter(duprate_mat,transformation = function(x) x^2,xlab="Cell barcodes ordered by covered gene number from high to low",ylab="Reads duplicate rate")
+    abline_cutoff <- length(which(coverGN >= measure_cutoff))
+    abline(v=abline_cutoff,col="purple",lwd=2,lty=2)
     par(new=T)
     plot(cs_coverGN_mat*100,type="l",lwd=2,col="red",xlab="",ylab="",main="",axes=F)
     axis(side=4)
-    mtext("detected gene%",4)
+    mtext("Detected gene%",4)
     legend("topright",legend=c("reads duplicate rate (left axis)","detected gene% (right axis)"),col=c("blue","red"),lwd=3,bty="n",cex=1.2)
-    abline_cutoff <- length(which(coverGN >= measure_cutoff))
-    abline(v=abline_cutoff,col="purple",lwd=2,lty=2)
 
 ### use umi count as cutoff
 }else{
