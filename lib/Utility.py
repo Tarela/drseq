@@ -3,14 +3,23 @@
 
 Function declare:
 
-def CMD         (cmd)
-def sp          (cmd)
-def raise_error ()
-def pdf_name    (input_name)
-def wlog        (message,logfile)
-def ewlog       (message,logfile)
-def rwlog       (message,logfile,dryrun)
-
+def CMD                  (cmd)
+def sp                   (cmd)
+def sperr                (cmd)
+def raise_error          ()
+def pdf_name             (input_name)
+def wlog                 (message,logfile)
+def ewlog                (message,logfile)
+def rwlog                (message,logfile,dryrun)
+def readAnnotation       (annotation)
+def textformat           (inp)
+def createDIR            (dirname)
+def strlatexformat       (instr)
+def strdis               (str1,str2)
+def transform_refgene    (refgene,ttsdis,outname)
+def reform_barcode_fastq (fq,reformtxt,cbL,umiL)
+def combine_reads        (barcodeF,cdsF,utr3F,utr5F,symbolF,ttsdisF,outF,dup_measure)
+def generate_matrix      (refgene,inputbed,ttsdis,qcmatfull,qcmat,expmat,coverGNcutoff,umidis1)
 """
 import subprocess
 import sys
@@ -26,7 +35,14 @@ def sp(cmd):
     a=subprocess.Popen(cmd, stdout=subprocess.PIPE, shell='TRUE')
     ac = a.communicate()
     return ac
-    
+def sperr(cmd):
+    '''
+    Call shell cmd or software and return its stdout
+    '''
+    a=subprocess.Popen(cmd, stderr=subprocess.PIPE, shell='TRUE')
+    ac = a.communicate()
+    return ac
+   
 def raise_error():
     '''
     Raise an error messgae and exit

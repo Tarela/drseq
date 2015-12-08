@@ -190,7 +190,7 @@ def main():
     # main data processing step, including mapping, generate expression matrix and QC matrix which is used in next step
     step1_generate_matrix(conf_dict,logfile)
     step1time = time.time() -t
-    wlog("running time for matrix generation: %s"%(step1time),logfile)
+    wlog("running time for expression matrix generation: %s"%(step1time),logfile)
     # QC step, including bulk RNAseq QC(option), individual cell QC
     t = time.time()
     step3_QC(conf_dict,logfile)

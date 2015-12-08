@@ -15,6 +15,7 @@ from string import *
 
 ### tool function
 from Drseqpipe.Utility      import (sp,
+                                   sperr,
                                    pdf_name,
                                    raise_error,
                                    wlog,
@@ -77,22 +78,22 @@ def step0_integrate_data(conf_dict,logfile):
         
     ### mapping index
     if conf_dict['General']['format'] == 'fastq':
-        if not conf_dict['Step1_Mapping']['mapindex'].endswith("/"):
-            conf_dict['Step1_Mapping']['mapindex'] += "/"
+#        if not conf_dict['Step1_Mapping']['mapindex'].endswith("/"):
+#            conf_dict['Step1_Mapping']['mapindex'] += "/"
         if conf_dict['Step1_Mapping']['mapping_software_main'] == "STAR":
             wlog('use STAR as alignment tools',logfile)
-            conf_dict['Step1_Mapping']['mapindex'] +='%s.star'%(conf_dict['General']['genome_version'])
+#            conf_dict['Step1_Mapping']['mapindex'] +='%s.star'%(conf_dict['General']['genome_version'])
             if not os.path.isdir(conf_dict['Step1_Mapping']['mapindex']):
-                wlog("[ERROR] cannot find STAR index folder : %s"%(conf_dict['Step1_Mapping']['mapindex']),logfile)
+                ewlog("cannot find STAR index folder : %s"%(conf_dict['Step1_Mapping']['mapindex']),logfile)
         elif conf_dict['Step1_Mapping']['mapping_software_main'] == "bowtie2":
             wlog('use bowtie2 as alignment tools',logfile)
-            indexdir = conf_dict['General']['mapindex'] + '%s.bowtie2/'%(conf_dict['General']['genome_version'])
-            conf_dict['Step1_Mapping']['mapindex'] = indexdir + conf_dict['General']['genome_version']
+#            indexdir = conf_dict['General']['mapindex'] + '%s.bowtie2/'%(conf_dict['General']['genome_version'])
+#            conf_dict['Step1_Mapping']['mapindex'] = indexdir + conf_dict['General']['genome_version']
             indexfile1 = conf_dict['Step1_Mapping']['mapindex']+'.1.bt2'
-            if not os.path.isdir(indexdir):
-                ewlog("cannot find bowtie2 index folder : %s "%(indexdir),logfile)
+#           if not os.path.isdir(indexdir):
+#               ewlog("cannot find bowtie2 index folder : %s "%(indexdir),logfile)
             if not os.path.isfile(indexfile1):
-                ewlog("cannot find bowtie2 index file under folder : %s "%(indexfile1),logfile)
+                ewlog("cannot find bowtie2 index file : %s "%(indexfile1),logfile)
         else:
             ewlog("alignment tools can only be STAR and bowtie2",logfile)
 
@@ -140,15 +141,37 @@ def step0_integrate_data(conf_dict,logfile):
 
     if not int(conf_dict['Step3_QC']['remove_non_dup_cell']) in [0,1]:
         ewlog('remove_non_dup_cell measurement can only be 0/1, current value is %s'%(conf_dict['Step3_QC']['remove_non_dup_cell']),logfile)
+    if float(conf_dict['Step3_QC']['non_dup_cutoff']) <= 0  or float(conf_dict['Step3_QC']['non_dup_cutoff']) >=1 :
+        ewlog('non_dup_cutoff measurement should be in 0~1, current value is %s'%(conf_dict['Step3_QC']['non_dup_cutoff']),logfile)
+    if float(conf_dict['Step4_Analysis']['highvarz']) <= 0  :
+        ewlog('non_dup_cutoff measurement cannot be <= 0, current value is %s'%(conf_dict['Step4_Analysis']['highvarz']),logfile)
+    if float(conf_dict['Step4_Analysis']['selectpccumvar']) <= 0 or float(conf_dict['Step4_Analysis']['selectpccumvar']) >=1 :
+        ewlog('selectpccumvar measurement should be in 0~1, current value is %s'%(conf_dict['Step4_Analysis']['selectpccumvar']),logfile)
+    if not int(conf_dict['Step4_Analysis']['clustering_method']) in [1,2,3,4] :
+        ewlog('clustering_method measurement should be chosen from 1,2,3 and 4, current value is %s'%(conf_dict['Step4_Analysis']['clustering_method']),logfile)
+
 
     ### check RseQC 
     for qc in ['gb_cover','read_gc','read_nvc','read_qul']:
         if int(conf_dict['Step3_QC']['bulk_qc']) == 1 and sp(conf_dict['Step3_QC'][qc])[0] == "" :
             ewlog('require %s, check whether you install RseQC correctly'%(conf_dict['Step3_QC'][qc]),logfile)
     
-    ### check bedtools
+    ### check samtools
+    if not 'view' in sperr('samtools')[1]:
+        ewlog('require samtools',logfile)
+        
+    ### check samtools
     if sp('bedtools')[0] == "":
-        elog('require bedtools',logfile)
+        ewlog('require bedtools',logfile)
+
+    ### check Rscript
+    if not 'Usage' in sperr('Rscript')[1] and not 'version' in sperr('Rscript')[1]:
+        ewlog('require Rscript',logfile)
+    
+    ### check pdflatex
+    if sp('pdflatex --help')[0] == "":
+        wlog('pdflatex was not installed, Dr.seq is still processing but no summary QC report generated',logfile)
+
 
     wlog('Step0 Data integrate DONE',logfile)
 

@@ -85,7 +85,7 @@ def step5_summary(conf_dict,logfile):
 \\newpage
 \section{Data description}
 \\begin{quotation}
-Table 1 mainly describe the input file and major parameters, including genome annotation, mapping solution and major options.
+Table 1 mainly describe the input file and mapping and analysis parameters.
 \end{quotation}
 \\begin{table}[h]
 \caption{Data description}\label{bstable}
@@ -340,7 +340,7 @@ Aggregate plot of reads coverage on all genes. Theoretically we observe a unimod
 In this step we focused on the quality of individual cell and distinguishing cell barcodes from STAMPs (single-cell transcriptomes attached to microparticles)
 \subsection{Reads duplicate rate distribution}
 \\begin{quotation}
-Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. Here we plotted the distribution of duplicate rate in each cell barcode (Though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate.
+Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. Here we plotted the distribution of duplicate rate in each cell barcode (though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate.
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads dupliate rate distribution} \label{fig:profileunion}
@@ -432,7 +432,7 @@ Histogram of covered gene number of selected STAMPs
 \\newpage
 \subsection{Intron rate distribution}
 \\begin{quotation}
-Intron rate is a effective method to measure the quality of a RNA-seq sample. We plotted a histogram of intron rate of every STAMP barcodes. Intron rate was defined as $\\frac{intron reads number}{intron + exon reads number}$ 
+Intron rate is a effective method to measure the quality of a RNA-seq sample. We plotted a histogram of intron rate of every STAMP barcodes. Intron rate was defined as $\\frac{intron\\ reads\\ number}{intron + exon\\ reads\\ number}$ 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Intron rate distribution} \label{fig:profileunion}
