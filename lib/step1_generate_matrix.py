@@ -60,7 +60,7 @@ def step1_generate_matrix(conf_dict,logfile):
             rwlog(mapping_cmd2,logfile,conf_dict['General']['dryrun'])
             
         elif conf_dict['Step1_Mapping']['mapping_software_main'] == "bowtie2":
-            mapping_cmd = 'bowtie2 -p %s -x %s -U %s -S %s.sam   2>&1 >>/dev/null |tee -a %s.bowtieout'%(conf_dict['Step1_Mapping']['mapping_p'],conf_dict['Step1_Mapping']['mapindex'],conf_dict['General']['outname'],conf_dict['General']['outname'])
+            mapping_cmd = 'bowtie2 -p %s -x %s -U %s -S %s.sam   2>&1 >>/dev/null |tee -a %s.bowtieout'%(conf_dict['Step1_Mapping']['mapping_p'],conf_dict['Step1_Mapping']['mapindex'],conf_dict['General']['reads_file'],conf_dict['General']['outname'],conf_dict['General']['outname'])
             rwlog(mapping_cmd,logfile,conf_dict['General']['dryrun'])
             
         else:
