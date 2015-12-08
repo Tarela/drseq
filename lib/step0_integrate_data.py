@@ -157,11 +157,11 @@ def step0_integrate_data(conf_dict,logfile):
             ewlog('require %s, check whether you install RseQC correctly'%(conf_dict['Step3_QC'][qc]),logfile)
     
     ### check samtools
-    if not 'view' in sperr('samtools')[1]:
+    if not 'view' in sperr(conf_dict['Step1_Mapping']['samtools_main'])[1]:
         ewlog('require samtools',logfile)
         
     ### check samtools
-    if sp('bedtools')[0] == "":
+    if sp(conf_dict['Step1_Mapping']['bedtools_main'])[0] == "":
         ewlog('require bedtools',logfile)
 
     ### check Rscript
@@ -171,7 +171,6 @@ def step0_integrate_data(conf_dict,logfile):
     ### check pdflatex
     if sp('pdflatex --help')[0] == "":
         wlog('pdflatex was not installed, Dr.seq is still processing but no summary QC report generated',logfile)
-
 
     wlog('Step0 Data integrate DONE',logfile)
 

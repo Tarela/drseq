@@ -62,7 +62,7 @@ def parse_args():
     '''
     Read parameter 
     '''
-    description = ">.< Drseq pipeline "
+    description = "Dr.seq -- a quality control and analysis pipeline for droplet sequencing"
     parser = ChiLinParser(description = description)
     sub_parsers = parser.add_subparsers(help = "sub-command help", dest = "sub_command")
 
