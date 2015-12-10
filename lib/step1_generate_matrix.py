@@ -73,14 +73,14 @@ def step1_generate_matrix(conf_dict,logfile):
     if int(conf_dict['Step1_Mapping']['q30filter']) == 1:
         wlog("q30 filter is turned on",logfile)
 #        q30cmd = """samtools view -q 30 -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
-#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
-        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4,$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4,$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
         rwlog(q30cmd,logfile,conf_dict['General']['dryrun'])
     else:
         wlog("q30 filter is turned off",logfile)
 #        q30cmd = """samtools view -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
-#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
-        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4,$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4+length($11),$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
         rwlog(q30cmd,logfile,conf_dict['General']['dryrun'])
     if not os.path.isfile(conf_dict['General']['bed']) or os.path.getsize(conf_dict['General']['bed']) == 0:
         ewlog('Alignment step / q30 filtering step failed, check your alignment parameter and samfile',logfile)
