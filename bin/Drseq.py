@@ -78,8 +78,10 @@ def parse_args():
                              help = "specify the config file, -c config_name.conf" )
     pipe_parser.add_argument("-f","--force_overwrite",dest='fover',  default=False, action='store_true', 
                              help = "The pipeline will over write output result if the output folder is already exist " )
-    pipe_parser.add_argument("--clean",dest='Clean' , default=True, action='store_true',
+    pipe_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
                              help = "remove intermediate result generated during Dr.seq,default is YES" )
+    pipe_parser.add_argument("--dryrun",dest='dryrun' , default=False, action='store_true',
+                             help = "Only print ALL cmd with out processing if set, default False" )
     ### simple mode
     simple_parser = sub_parsers.add_parser("simple", help = "run Drseq using simple mode",
                                          description = "(Run Drseq pipeline using simple mode/command line mode) Usage: Drseq.py -a barcode.fastq -b reads.fastq -n outname -s mm10 -g mm10_refgenes.txt --mapindex /yourmapindexfolder/mm10.star")
@@ -87,23 +89,28 @@ def parse_args():
                              help = "[required] barcode fastq file before any filtering step, only accept .fastq format" )
     simple_parser.add_argument("-r","--reads",dest='reads',required = True,
                              help = "[required] reads fastq file, accept raw fastq input or aligned sam format, format(fastq,sam) fixed by extension(.fastq or .sam)" )
-    simple_parser.add_argument("-n","--name", dest="name",required = True,help="[required] name of you config file and output dir, name only , no extension")
-    simple_parser.add_argument("-s","--species",  choices = ("hg38", "mm10"), required = True,
-                             help = "[required] species ,choose from hg38 and mm10" )
-    simple_parser.add_argument("-f","--force_overwrite",dest='fover',  default=False, action='store_true', 
-                             help = "specify the config file to create output folder , this cmd will rm existing result if set True ~!! " )
+    simple_parser.add_argument("-n","--name", dest="name",required = True,
+                             help="[required] name of you config file and output dir, name only , no extension. The output files will be named like name.pdf, name.txt ... ")
     simple_parser.add_argument("--cellbarcodelength",dest='CBL' ,default='12', 
                              help = "specify the length of yoru cell barcode , default is 12, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("--umilength",dest='UMIL',  default='8', 
                              help = "specify the length of yoru UMI , default is 8, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("-g","--gene_annotation",dest='GA', required = False,
                              help = "[required if you didn't specific it in template config file] gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
+    simple_parser.add_argument("--maptool",dest='maptool' , choices = ("STAR", "bowtie2"),default="STAR", 
+                             help = "choose mapping software for alignment, default is STAR, you can also choose bowtie2 as another option. mapping tool should corresponded to mapindex, STAR vs. STAR index, bowtie2 vs. bowtie2 index. Dr.seq will check your total memory if you choose STAR, becuse STAR consumes huge memory for mapping though fast. If you don't have 40G for total memory and choose STAR, Dr.seq will exit to protect your server/computer. you can also turn off the checkmem option to run STAR direclty" )
+    simple_parser.add_argument("--checkmem",dest='checkmem' , choices = ("0", "1"), default="1",
+                             help = "(default is 1 (on), only take effect when maptool = STAR) Dr.seq will check your total memory (if turned on, set 1, default) to make sure its greater 40G if you choose STAR as mapping tool. We don't suggest to run STAR on Mac. You can turn off (set 0) this function if you prefer STAR regardless of your memory (which may cause crash down of your computer) " )
     simple_parser.add_argument("--mapindex",dest='mapindex',required = False,
                              help = "[required if you didn't specific it in template config file] mapping index folder, there should be a mm10.star folder under mapindex folder if you use STAR to map to mm10 genome, mm10.bowtie2 folder if use bowtie2. for bowtie2, the index file should named like mm10.1.bt2(see documents for detail)" )
     simple_parser.add_argument("--thread",dest='P' ,default='8', 
                              help = "number of alignment threads to launch, ignored for sam input" )
-    simple_parser.add_argument("--clean",dest='Clean' , default=True, action='store_true',
-                             help = "remove intermediate result generated during Dr.seq,default is YES" )
+    simple_parser.add_argument("-f","--force_overwrite",dest='fover',  default=False, action='store_true', 
+                             help = "specify the config file to create output folder , this cmd will rm existing result if set True ~!! " )
+    simple_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
+                             help = "remove intermediate result generated during Dr.seq,default is No" )
+    simple_parser.add_argument("--dryrun",dest='dryrun' , default=False, action='store_true',
+                             help = "Only print ALL cmd with out processing if set, default False" )
         
     
     args = parser.parse_args()
@@ -125,7 +132,7 @@ def parse_args():
     if args.sub_command == "simple":
         if args.name.endswith('.conf'):
             args.name = args.name[:-5]
-        make_conf(args.barcode,args.reads,args.species,args.name,args.fover,args.CBL,args.UMIL,args.GA,args.P,args.mapindex)
+        make_conf(args.barcode,args.reads,args.name,args.fover,args.CBL,args.UMIL,args.GA,args.P,args.mapindex,args.checkmem,args.maptool)
         args.config = args.name + '.conf'
         return args
 
@@ -153,18 +160,17 @@ def main():
         conf_dict['General']['outputdirectory'] += '/'
     if not "/" in conf_dict['General']['outputdirectory'].rstrip("/"):
         conf_dict['General']['outputdirectory'] = conf_dict['General']['startdir'] + conf_dict['General']['outputdirectory']
-
-
+    
     ### creat output dir
     if os.path.isfile(conf_dict['General']['outputdirectory'].rstrip("/")):
-        print 'name of your output dir is exist as a file, cannot create a dir,exit'
+        print 'name of your output dir is exist as a file, cannot create a dir,Dr.seq exit'
         sys.exit(1)
     elif os.path.isdir(conf_dict['General']['outputdirectory']):
         if not args.fover:
-            print 'name of your output dir is exist as a dir, and overwrite is turned off,exit'
+            print 'name of your output dir is exist as a dir, Dr.seq exit because overwrite function is turned off, you can add -f parameter to turn on overwite function'
             sys.exit(1)
         else: 
-            print 'name of your output dir is exist as a dir, overwrite if turned on, write output result in existing dir'
+            print 'name of your output dir is exist as a dir, overwrite is turned on, write output result in existing dir'
     else:
 		os.system("mkdir %s"%(conf_dict['General']['outputdirectory']))
      
@@ -183,6 +189,13 @@ def main():
     #CONFIG_TEMPLATE = os.path.join(Drseq_pipe.__path__[0], "Config/Drseq_template.conf")
     conf_dict['rscript'] = os.path.join(Drseqpipe.__path__[0], "Rscript/")#'/mnt/Storage3/CR/Dropseq/drseq/Rscript/'
     conf_dict['clean'] = args.Clean
+    
+    ### check dryrun
+    if args.dryrun:
+        conf_dict['General']['dryrun'] = 1
+    else:
+        conf_dict['General']['dryrun'] = 0
+    
     ### main step for Dr.seq , see individual script for detail note.
     # preparing step, integrate parameter, prepare for following step
     t = time.time()
@@ -209,6 +222,6 @@ if __name__== '__main__':
         main()
 
     except KeyboardInterrupt:
-        sys.stderr.write("User interrupt me ^_^ \n")
+        sys.stderr.write("User interrupt Dr.seq\n")
         sys.exit(1)
 

@@ -126,8 +126,6 @@ reads file(file name only) & %s \\\\
 \hline
 reads file format & %s  \\\\
 \hline
-genome version & %s \\\\
-\hline
 cell barcode length &  %s \\\\
 \hline
 UMI length & %s \\\\
@@ -142,7 +140,6 @@ remove reads away TTS & %s \\\\
      strlatexformat(conf_dict['General']['barcode_file'].split("/")[-1]),
      strlatexformat(conf_dict['General']['reads_file'].split("/")[-1]),
      conf_dict['General']['format'].upper(),
-     conf_dict['General']['genome_version'],
      str(conf_dict['General']['cell_barcode_length']),
      str(conf_dict['General']['umi_length']),
      conf_dict['Step1_Mapping']['mapping_software_main'],
@@ -538,9 +535,9 @@ summary QC report & %s \\\\
     outf.write(QCdoc)
     outf.close()
     cmd = "pdflatex %s"%(latexfile)
-#    rwlog(cmd,logfile,conf_dict['General']['dryrun'])
-    rwlog(cmd,logfile,0)
-    rwlog(cmd,logfile,0)
+    rwlog(cmd,logfile,conf_dict['General']['dryrun'])
+#    rwlog(cmd,logfile,0)
+#    rwlog(cmd,logfile,0)
 
     if conf_dict['clean']:
         wlog('clean pararmeter was turned on, remove internal files',logfile)

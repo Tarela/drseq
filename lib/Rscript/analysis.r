@@ -52,7 +52,7 @@ givenK_kmeans <- function(indata,SD,Knum,clusterplot){
 
 givenE_dbscan <- function(indata,EPS,clusterplot){
     pdf(file=clusterplot)
-    ds <- dbscan(indata,eps=EPS)
+    ds <- ref_dbscan(indata,eps=EPS)
     kmsize <- sort(cluster_result[,3],decreasing=T)[1]
     plot(indata,pch=16,xlab="t-SNE 1",ylab="t-SNE 2",main=paste("DBSCAN (eps=", EPS, ")",sep=""))
     rain <- rainbow(kmsize)
@@ -104,6 +104,106 @@ g20 <- Gname[order(Gave)[(1+each*19):(length(Gname))]]
 highvargene <- c(g2[which((scale(Gdp[g2]))>highvarZ)],g3[which((scale(Gdp[g3]))>highvarZ)],g4[which((scale(Gdp[g4]))>highvarZ)],g5[which((scale(Gdp[g5]))>highvarZ)],g6[which((scale(Gdp[g6]))>highvarZ)],g7[which((scale(Gdp[g7]))>highvarZ)],g8[which((scale(Gdp[g8]))>highvarZ)],g9[which((scale(Gdp[g9]))>highvarZ)],g10[which((scale(Gdp[g10]))>highvarZ)],g11[which((scale(Gdp[g11]))>highvarZ)],g12[which((scale(Gdp[g12]))>highvarZ)],g13[which((scale(Gdp[g13]))>highvarZ)],g14[which((scale(Gdp[g14]))>highvarZ)],g15[which((scale(Gdp[g15]))>highvarZ)],g16[which((scale(Gdp[g16]))>highvarZ)],g17[which((scale(Gdp[g17]))>highvarZ)],g18[which((scale(Gdp[g18]))>highvarZ)],g19[which((scale(Gdp[g19]))>highvarZ)],g20[which((scale(Gdp[g20]))>highvarZ)])
 return(highvargene)
 }
+
+ref_dbscan <- function(data, eps, MinPts = 5, scale = FALSE, method = c("hybrid", 
+    "raw", "dist"), seeds = TRUE, showplot = FALSE, countmode = NULL) 
+{
+    distcomb <- function(x, data) {
+        data <- t(data)
+        temp <- apply(x, 1, function(x) {
+            sqrt(colSums((data - x)^2))
+        })
+        if (is.null(dim(temp))) 
+            matrix(temp, nrow(x), ncol(data))
+        else t(temp)
+    }
+    method <- match.arg(method)
+    data <- as.matrix(data)
+    n <- nrow(data)
+    if (scale) 
+        data <- scale(data)
+    classn <- cv <- integer(n)
+    isseed <- logical(n)
+    cn <- integer(1)
+    for (i in 1:n) {
+        if (i %in% countmode) 
+            cat("Processing point ", i, " of ", n, ".\n")
+        unclass <- (1:n)[cv < 1]
+        if (cv[i] == 0) {
+            if (method == "dist") {
+                reachables <- unclass[data[i, unclass] <= eps]
+            }
+            else {
+                reachables <- unclass[as.vector(distcomb(data[i, 
+                  , drop = FALSE], data[unclass, , drop = FALSE])) <= 
+                  eps]
+            }
+            if (length(reachables) + classn[i] < MinPts) 
+                cv[i] <- (-1)
+            else {
+                cn <- cn + 1
+                cv[i] <- cn
+                isseed[i] <- TRUE
+                reachables <- setdiff(reachables, i)
+                unclass <- setdiff(unclass, i)
+                classn[reachables] <- classn[reachables] + 1
+                while (length(reachables)) {
+                  if (showplot) 
+                    plot(data, col = 1 + cv, pch = 1 + isseed)
+                  cv[reachables] <- cn
+                  ap <- reachables
+                  reachables <- integer()
+                  if (method == "hybrid") {
+                    tempdist <- distcomb(data[ap, , drop = FALSE], 
+                      data[unclass, , drop = FALSE])
+                    frozen.unclass <- unclass
+                  }
+                  for (i2 in seq(along = ap)) {
+                    j <- ap[i2]
+                    if (showplot > 1) 
+                      plot(data, col = 1 + cv, pch = 1 + isseed)
+                    if (method == "dist") {
+                      jreachables <- unclass[data[j, unclass] <= 
+                        eps]
+                    }
+                    else if (method == "hybrid") {
+                      jreachables <- unclass[tempdist[i2, match(unclass, 
+                        frozen.unclass)] <= eps]
+                    }
+                    else {
+                      jreachables <- unclass[as.vector(distcomb(data[j, 
+                        , drop = FALSE], data[unclass, , drop = FALSE])) <= 
+                        eps]
+                    }
+                    if (length(jreachables) + classn[j] >= MinPts) {
+                      isseed[j] <- TRUE
+                      cv[jreachables[cv[jreachables] < 0]] <- cn
+                      reachables <- union(reachables, jreachables[cv[jreachables] == 
+                        0])
+                    }
+                    classn[jreachables] <- classn[jreachables] + 
+                      1
+                    unclass <- setdiff(unclass, j)
+                  }
+                }
+            }
+        }
+        if (!length(unclass)) 
+            break
+    }
+    rm(classn)
+    if (any(cv == (-1))) {
+        cv[cv == (-1)] <- 0
+    }
+    if (showplot) 
+        plot(data, col = 1 + cv, pch = 1 + isseed)
+    out <- list(cluster = cv, eps = eps, MinPts = MinPts)
+    if (seeds && cn > 0) {
+        out$isseed <- isseed
+    }
+    class(out) <- "dbscan"
+    out
+}  
 
 ref_tsne <-
 function(X, initial_config = NULL, k=2, initial_dims=30, perplexity=30, max_iter = 1000, min_cost=0, epoch_callback=NULL,whiten=TRUE, epoch=100 ){
@@ -347,16 +447,9 @@ gap_plot <- paste(outname,'_GapStat.pdf',sep="")
 cluster_plot <- paste(outname,'_cluster.pdf',sep="")
 if (clustering_method == 4){
     ### if user choose dbscan
-    if(!require(fpc)) {
-	    install.packages("fpc")
-	    library(fpc)
-    }
     final_result <- givenE_dbscan(tsne_result,custom_d,cluster_plot)
-}else{
-    if(!require(cluster)) {
-	    install.packages("cluster")
-	    library(cluster)
-    }
+}else{	
+	library(cluster)
     ### if user choose kmeans
     ## different method to decide k
     if(clustering_method == 1){

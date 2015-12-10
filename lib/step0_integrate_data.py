@@ -18,6 +18,7 @@ from Drseqpipe.Utility      import (sp,
                                    sperr,
                                    pdf_name,
                                    raise_error,
+                                   detect_memory,
                                    wlog,
                                    ewlog,
                                    CMD
@@ -82,12 +83,22 @@ def step0_integrate_data(conf_dict,logfile):
 #            conf_dict['Step1_Mapping']['mapindex'] += "/"
         if conf_dict['Step1_Mapping']['mapping_software_main'] == "STAR":
             wlog('use STAR as alignment tools',logfile)
+            if int(conf_dict['Step1_Mapping']['checkmem']) == 1:
+                wlog('memory check is turned on, check total memory',logfile)
+                totalMemory = detect_memory()
+                if totalMemory == "NA"  : 
+                    ewlog('''cannot detect total memory (because your server don't have /proc/meminfo file or you are running Dr.seq on Mac computer), Dr.seq exit to protect your server from crash down. You can turn off the memory check and run Dr.seq again if you do want to use STAR as mapping software or you can use bowtie2 instead.''',logfile)
+                elif totalMemory < 40 : 
+                    ewlog('''Total memory of your server/computer is %sG, less than 40G (memory cutoff for STAR), Dr.seq exit to protect your server from crash down. You can turn off the memory check and run Dr.seq again if you do want to use STAR as mapping software or you can use bowtie2 instead '''%(str(totalMemory)),logfile)
+                else:
+                    wlog('''Total memory of your  server/computer is %sG, greater than 40G (memory cutoff for STAR), Dr.seq will use STAR as mapping software'''%(str(totalMemory)),logfile)
+            else:
+                wlog('memory check is turned off, start mapping with STAR ### STAR consume > 30G memory, make sure your server have enough memory ###',logfile)
 #            conf_dict['Step1_Mapping']['mapindex'] +='%s.star'%(conf_dict['General']['genome_version'])
             if not os.path.isdir(conf_dict['Step1_Mapping']['mapindex']):
                 ewlog("cannot find STAR index folder : %s"%(conf_dict['Step1_Mapping']['mapindex']),logfile)
         elif conf_dict['Step1_Mapping']['mapping_software_main'] == "bowtie2":
             wlog('use bowtie2 as alignment tools',logfile)
-#            indexdir = conf_dict['General']['mapindex'] + '%s.bowtie2/'%(conf_dict['General']['genome_version'])
 #            conf_dict['Step1_Mapping']['mapindex'] = indexdir + conf_dict['General']['genome_version']
             indexfile1 = conf_dict['Step1_Mapping']['mapindex']+'.1.bt2'
 #           if not os.path.isdir(indexdir):
@@ -155,18 +166,10 @@ def step0_integrate_data(conf_dict,logfile):
     for qc in ['gb_cover','read_gc','read_nvc','read_qul']:
         if int(conf_dict['Step3_QC']['bulk_qc']) == 1 and sp(conf_dict['Step3_QC'][qc])[0] == "" :
             ewlog('require %s, check whether you install RseQC correctly'%(conf_dict['Step3_QC'][qc]),logfile)
-    
-    ### check samtools
-    if not 'view' in sperr(conf_dict['Step1_Mapping']['samtools_main'])[1]:
-        ewlog('require samtools',logfile)
         
-    ### check samtools
-    if sp(conf_dict['Step1_Mapping']['bedtools_main'])[0] == "":
-        ewlog('require bedtools',logfile)
-
     ### check Rscript
-    if not 'Usage' in sperr('Rscript')[1] and not 'version' in sperr('Rscript')[1]:
-        ewlog('require Rscript',logfile)
+    #if not 'Usage' in sperr('Rscript')[1] and not 'version' in sperr('Rscript')[1]:
+    #    ewlog('require Rscript',logfile)
     
     ### check pdflatex
     if sp('pdflatex --help')[0] == "":

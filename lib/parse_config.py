@@ -3,7 +3,7 @@
 """
 Function declare:
 
-def gen_conf (species, name)
+def gen_conf (name)
 def read_conf(configfile)
 
 """
@@ -49,9 +49,9 @@ def read_conf(conf_file):
     return conf_dict
 
 ### generate a config file in simple mode
-#        make_conf(args.barcode,args.reads,args.species,args.name,args.fover,args.CBL,args.UMIL,args.RF,args.P)
+#        make_conf(args.barcode,args.reads,args.name,args.fover,args.CBL,args.UMIL,args.RF,args.P)
 
-def make_conf(barcode_file,reads_file,species,outname,fover,cellbarcodeL,umiL,geneanno,P,mapindex):
+def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P,mapindex,checkmem,maptool):
     inf = open(CONFIG_TEMPLATE)
     name = outname
     if os.path.isfile(name+'.conf') and  not fover :
@@ -75,6 +75,11 @@ def make_conf(barcode_file,reads_file,species,outname,fover,cellbarcodeL,umiL,ge
             newline = 'outputdirectory = ' + name + '\n'
         elif line.startswith('outname ='):
             newline = 'outname = ' + name + '\n'
+        elif line.startswith('checkmem ='):
+            newline = 'checkmem = ' + checkmem + '\n'
+        elif line.startswith('mapping_software_main ='):
+            newline = 'mapping_software_main = ' + maptool + '\n'
+            
         elif line.startswith('gene_annotation ='):
             if geneanno:
                 newline = 'gene_annotation = ' + geneanno + '\n'
@@ -85,8 +90,6 @@ def make_conf(barcode_file,reads_file,species,outname,fover,cellbarcodeL,umiL,ge
                 newline = 'mapindex = ' + mapindex + '\n'
             else:
                 newline = line
-        elif line.startswith('genome_version ='):
-            newline = 'genome_version = '+ species + '\n'
         elif line.startswith('mapping_p ='):
             newline = 'mapping_p = ' + str(P) + '\n'
         else:

@@ -129,7 +129,7 @@ def step3_QC(conf_dict,logfile):
     else:
         ewlog('select_cell_measure value can only be 1 or 2, current value is %s'%(conf_dict['Step4_Analysis']['select_cell_measure']),logfile)
 
-    cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%(conf_dict['General']['rscript_main'],conf_dict['rscript']+'individual_qc.r',conf_dict['Step2_ExpMat']['qcmat'],conf_dict['Step2_ExpMat']['expmat'],conf_dict['General']['outname'],conf_dict['Step3_QC']['select_cell_measure'],use_cutoff,conf_dict['Step3_QC']['remove_non_dup_cell'],conf_dict['Step3_QC']['non_dup_cutoff'],conf_dict['Mapping_stat']['umi_gene'],conf_dict['results']['qcmatcc'],conf_dict['results']['expmatcc'],conf_dict['General']['png_for_dot'])
+    cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%('Rscript',conf_dict['rscript']+'individual_qc.r',conf_dict['Step2_ExpMat']['qcmat'],conf_dict['Step2_ExpMat']['expmat'],conf_dict['General']['outname'],conf_dict['Step3_QC']['select_cell_measure'],use_cutoff,conf_dict['Step3_QC']['remove_non_dup_cell'],conf_dict['Step3_QC']['non_dup_cutoff'],conf_dict['Mapping_stat']['umi_gene'],conf_dict['results']['qcmatcc'],conf_dict['results']['expmatcc'],conf_dict['General']['png_for_dot'])
     rwlog(cmd,logfile,conf_dict['General']['dryrun'])
     wlog("Step3 bulk and individual cell QC DONE",logfile)
     individualqctime = time.time() -t

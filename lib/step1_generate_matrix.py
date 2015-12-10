@@ -36,9 +36,9 @@ def step1_generate_matrix(conf_dict,logfile):
     main data processing step, including mapping, generate expression matrix and QC matrix which is used in next step
     for fastq format : 
         STAR/bowtie2 mapping
-        samtools q30 filter, 
+        q30 filter, 
     for sam format:
-        samtools q30 filter     
+        q30 filter     
     '''
     wlog("Step1: alignment",logfile)
     t= time.time()
@@ -67,19 +67,23 @@ def step1_generate_matrix(conf_dict,logfile):
             ewlog("alignment tools can only be STAR and bowtie2",logfile)
 
         conf_dict['General']['sam'] = mapping_dir + conf_dict['General']['outname'] + '.sam'
-    ### transform to bed file, samtools helps to conduct q30 filtering
-    wlog("transfer sam file to aligned bed file with samtools",logfile)
+    ### transform to bed file, awk helps to conduct q30 filtering
+    wlog("transfer sam file to aligned bed file",logfile)
     conf_dict['General']['bed'] = mapping_dir + conf_dict['General']['outname'] + '.bed' 
     if int(conf_dict['Step1_Mapping']['q30filter']) == 1:
         wlog("q30 filter is turned on",logfile)
-        q30cmd = """samtools view -q 30 -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """samtools view -q 30 -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr" && $5 > 30) {if ($2 == 16) print $3,$4-1,$4,$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
         rwlog(q30cmd,logfile,conf_dict['General']['dryrun'])
     else:
         wlog("q30 filter is turned off",logfile)
-        q30cmd = """samtools view -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """samtools view -XS %s | awk '{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if (substr($2,1,1) == "r") print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+#        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4-1+length($11),$1,255,"-";else print $3,$4-1,$4-1+length($11),$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
+        q30cmd = """awk '/^[^@]/{FS="\t";OFS="\t";if (substr($3,1,3) == "chr") {if ($2 == 16) print $3,$4-1,$4,$1,255,"-";else print $3,$4-1,$4,$1,255,"+";}}' %s > %s"""%(conf_dict['General']['sam'],conf_dict['General']['bed'])
         rwlog(q30cmd,logfile,conf_dict['General']['dryrun'])
-    if os.path.getsize(conf_dict['General']['bed']) == 0:
-        ewlog('Alignment step / q30 filtering step failed, check your alignment parameter and q30 parameter',logfile)
+    if not os.path.isfile(conf_dict['General']['bed']) or os.path.getsize(conf_dict['General']['bed']) == 0:
+        ewlog('Alignment step / q30 filtering step failed, check your alignment parameter and samfile',logfile)
     s1time = time.time() -t
     wlog("time for alignment: %s"%(s1time),logfile)
     wlog("Step1: alignment DONE",logfile)
@@ -100,14 +104,14 @@ def step1_generate_matrix(conf_dict,logfile):
     createDIR(expdir)
     os.chdir(expdir)
     
-    ### use bedtools to assign exon/intron/intergenic/overlapping gene  information to all reads
+    ### use bedtools(intersectBed function) to assign exon/intron/intergenic/overlapping gene  information to all reads
     ### sort according to name
     wlog('add gene annotation on aligned bed file',logfile)
-    cmd1 = "%s intersect -a %s -b %s  -wo   | sort -k 4,4 - >  %s"%(conf_dict['Step1_Mapping']['bedtools_main'],conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_symbol.bed',conf_dict['General']['outname']+'_on_symbol.bed')
-    cmd2 = "%s intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['Step1_Mapping']['bedtools_main'],conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_cds.bed',conf_dict['General']['outname']+'_on_cds.bed')
-    cmd3 = "%s intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['Step1_Mapping']['bedtools_main'],conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_3utr.bed',conf_dict['General']['outname']+'_on_3utr.bed')
-    cmd4 = "%s intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['Step1_Mapping']['bedtools_main'],conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_5utr.bed',conf_dict['General']['outname']+'_on_5utr.bed')
-    cmd5 = "%s intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['Step1_Mapping']['bedtools_main'],conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_TTSdis.bed',conf_dict['General']['outname']+'_on_TTSdis.bed')
+    cmd1 = "intersectBed -a %s -b %s  -wo   | sort -k 4,4 - >  %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_symbol.bed',conf_dict['General']['outname']+'_on_symbol.bed')
+    cmd2 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_cds.bed',conf_dict['General']['outname']+'_on_cds.bed')
+    cmd3 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_3utr.bed',conf_dict['General']['outname']+'_on_3utr.bed')
+    cmd4 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_5utr.bed',conf_dict['General']['outname']+'_on_5utr.bed')
+    cmd5 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_TTSdis.bed',conf_dict['General']['outname']+'_on_TTSdis.bed')
     rwlog(cmd1,logfile,conf_dict['General']['dryrun'])
     rwlog(cmd2,logfile,conf_dict['General']['dryrun'])
     rwlog(cmd3,logfile,conf_dict['General']['dryrun'])

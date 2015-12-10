@@ -7,6 +7,7 @@ def CMD                  (cmd)
 def sp                   (cmd)
 def sperr                (cmd)
 def raise_error          ()
+def detect_memory        ()
 def pdf_name             (input_name)
 def wlog                 (message,logfile)
 def ewlog                (message,logfile)
@@ -49,6 +50,27 @@ def raise_error():
     '''
     print 'error occurs, check log file~!'
     sys.exit(1)
+
+
+def detect_memory():
+    meminfo={}#OrderedDict()
+    try:
+        with open('/proc/meminfo') as f:
+            for line in f:
+                meminfo[line.split(':')[0].strip()] = line.split(':')[1].strip()
+        totalM = meminfo['MemTotal'].split()
+        #freeM = meminfo['MemFree'].split()
+        if totalM[1].lower() == "kb":
+            try:
+                totalM_G = int(totalM[0])/1e6
+                return totalM_G
+            except:
+                return 'NA'
+        else:
+            return 'NA'    
+    except:
+        return 'NA'
+
 
 def pdf_name(input_name):
     '''
