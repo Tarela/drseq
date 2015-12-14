@@ -176,9 +176,9 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
         end = start + seqlen
         txname = ll[0]
         mapQ = ll[4]
-        if ll[2] == "0":
+        if ll[1] == "0":
             strand = "+"
-        elif ll[2] == "16":
+        elif ll[1] == "16":
             strand = "-"
         else:
             continue
@@ -203,13 +203,12 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
         end = start + seqlen
         txname = ll[0]
         mapQ = ll[4]
-        if ll[2] == "0":
+        if ll[1] == "0":
             strand = "+"
-        elif ll[2] == "16":
+        elif ll[1] == "16":
             strand = "-"
         else:
             continue
-        totalN += 1
         if random.randint(1,10000) <= p:
             outSDsam.write(line)
             newll = [chrom,start,end,txname,'255',strand]
