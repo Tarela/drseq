@@ -43,28 +43,26 @@ def step5_summary(conf_dict,logfile):
     createDIR(summarydir)
     os.chdir(summarydir)
     
-    result_plot_folder = summarydir + "plots/"
-    createDIR(result_plot_folder)
-    os.chdir(result_plot_folder)
+    plot_folder = summarydir + "plots/"
+    createDIR(plot_folder)
+    os.chdir(plot_folder)
     ### collect results 
     for i in conf_dict['QCplots']:
-        if int(conf_dict['Step3_QC']['bulk_qc']) ==0 and i in ['read_gc','read_nvc','gb_cover','read_qul']:
-            pass
-        else:
-            if os.path.isfile(conf_dict['QCplots'][i]):
-                #realname
-                cmd = 'cp %s .'%conf_dict['QCplots'][i]
-#                rwlog(cmd,logfile,conf_dict['General']['dryrun'])
-                rwlog(cmd,logfile,0)
+    
+        if os.path.isfile(conf_dict['QCplots'][i]):
+            #realname
+            cmd = 'cp %s .'%conf_dict['QCplots'][i]
+#            rwlog(cmd,logfile,conf_dict['General']['dryrun'])
+            rwlog(cmd,logfile,0)
 
-    os.chdir(summarydir)
+    result_folder = summarydir + "results/"
+    createDIR(result_folder)
+    os.chdir(result_folder)
     for i in conf_dict['results']:
         if os.path.isfile(conf_dict['results'][i]):
             cmd = 'cp %s .'%conf_dict['results'][i]
 #            rwlog(cmd,logfile,conf_dict['General']['dryrun'])
             rwlog(cmd,logfile,0)
-
-    
     
     wlog('generate qc documents',logfile)
     ### initiate 
@@ -105,10 +103,6 @@ Table 1 mainly describe the input file and mapping and analysis parameters.
         umidis1 = "True"
     else:
         umidis1 = "False"
-    if int(conf_dict['Step3_QC']['bulk_qc']) == 1:
-        bulk_qc = "True"
-    else:
-        bulk_qc = "False"
     if int(conf_dict['Step3_QC']['remove_non_dup_cell']) == 1:
         rmnodup = "True"
     else:
@@ -164,11 +158,6 @@ remove reads away TTS & %s \\\\
 \hline
 merge UMI ED = 1 & %s \\\\ 
 \hline"""%(umidis1)
-    QCdoc += """
-conduct bulk-cell level QC & %s \\\\
-\hline
-conduct individual-cell level QC & True \\\\
-\hline """%(bulk_qc)
     if  int(conf_dict['Step3_QC']['select_cell_measure']) == 1:
         QCdoc += """
 select STAMPs & %s covered gene \\\\
@@ -209,8 +198,7 @@ cluster method & DBScan (eps=%s) \\\\"""%(conf_dict['Step4_Analysis']['custom_d'
 \end{table}
 """
     ### bulk QC
-    if bulk_qc == "True":
-        QCdoc += """
+    QCdoc += """
 \\newpage
 \\newpage
 \section{Reads level QC}

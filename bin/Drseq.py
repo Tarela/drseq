@@ -63,7 +63,7 @@ def parse_args():
     Read parameter 
     '''
     description = "Dr.seq -- a quality control and analysis pipeline for droplet sequencing"
-    parser = ChiLinParser(description = description)
+    parser = ChiLinParser(description = description, version = "Dr.seq 1.0 2015121")
     sub_parsers = parser.add_subparsers(help = "sub-command help", dest = "sub_command")
 
     ### generate config file
@@ -110,9 +110,12 @@ def parse_args():
     simple_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
                              help = "remove intermediate result generated during Dr.seq,default is No" )
     simple_parser.add_argument("--dryrun",dest='dryrun' , default=False, action='store_true',
-                             help = "Only print ALL cmd with out processing if set, default False" )
-        
-    
+                             help = "Only print ALL cmd and description with out processing if set, default False" )
+    simple_parser.add_argument("--select_cell_measure",dest='select_cell_measure' , choices = ("1", "2"), default="1",
+                             help = "Method to select STAMPs from cell_barcodes, choose from 1 or 2 (default is 1), 1: Cell_barcodes with more than 1000 genes covered are selected. 2: Top 1000 cell_harcodes with highest umi count will be selected" )
+    simple_parser.add_argument("--remove_low_dup_cell",dest='remove_low_dup_cell' , choices = ("0", "1"), default="1",
+                             help = "discard cell barcodes with low duplicate rate (< 0.1), set 1 (default) to turn on this function, set 0 to turn off. May not effective for samples with low sequencing depth" )
+
     args = parser.parse_args()
     ## generate config file template 
     if args.sub_command == "gen":
@@ -132,7 +135,7 @@ def parse_args():
     if args.sub_command == "simple":
         if args.name.endswith('.conf'):
             args.name = args.name[:-5]
-        make_conf(args.barcode,args.reads,args.name,args.fover,args.CBL,args.UMIL,args.GA,args.P,args.mapindex,args.checkmem,args.maptool)
+        make_conf(args.barcode,args.reads,args.name,args.fover,args.CBL,args.UMIL,args.GA,args.P,args.mapindex,args.checkmem,args.maptool,args.select_cell_measure,args.remove_low_dup_cell)
         args.config = args.name + '.conf'
         return args
 

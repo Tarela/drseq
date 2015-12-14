@@ -35,7 +35,7 @@ def step4_analysis(conf_dict,logfile):
     # create section for 
     t = time.time()
     wlog('Step4: analysis',logfile)
-    wlog('dimentional reduction + clustering',logfile)
+    wlog('dimentional reduction + clustering with own script, based on selected STAMP barcodes',logfile)
 # Rscript analysis.r expmat outname coverGN highvarZ selectPCcutoff rdnumber maxKnum
     analysisdir = conf_dict['General']['outputdirectory'] + 'analysis/'
     createDIR(analysisdir)

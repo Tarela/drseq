@@ -119,9 +119,6 @@ def step0_integrate_data(conf_dict,logfile):
     if not int(conf_dict['Step1_Mapping']['q30filter']) in [0,1]:
         ewlog('q30filter measurement can only be 0/1, current value is %s'%(conf_dict['Step1_Mapping']['q30filter']),logfile)
 
-    if not int(conf_dict['Step3_QC']['bulk_qc']) in [0,1]:
-        ewlog('bulk_qc measurement can only be 0/1, current value is %s'%(conf_dict['Step3_QC']['q30filter']),logfile)
-
     if not int(conf_dict['Step2_ExpMat']['filterttsdistance']) in [0,1]:
         ewlog('filterttsdistance measurement can only be 0/1, current value is %s'%(conf_dict['Step2_ExpMat']['filterttsdistance']),logfile)
     
@@ -162,11 +159,6 @@ def step0_integrate_data(conf_dict,logfile):
         ewlog('clustering_method measurement should be chosen from 1,2,3 and 4, current value is %s'%(conf_dict['Step4_Analysis']['clustering_method']),logfile)
 
 
-    ### check RseQC 
-    for qc in ['gb_cover','read_gc','read_nvc','read_qul']:
-        if int(conf_dict['Step3_QC']['bulk_qc']) == 1 and sp(conf_dict['Step3_QC'][qc])[0] == "" :
-            ewlog('require %s, check whether you install RseQC correctly'%(conf_dict['Step3_QC'][qc]),logfile)
-        
     ### check Rscript
     #if not 'Usage' in sperr('Rscript')[1] and not 'version' in sperr('Rscript')[1]:
     #    ewlog('require Rscript',logfile)

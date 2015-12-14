@@ -1,5 +1,11 @@
 #!/usr/bin/env python
-
+"""Description
+Setup script for Dr.seq  -- QC and analysis pipeline for Drop-seq data
+Copyright (c) 2015 Shengen Hu <tarelahu@gmail.com>
+This code is free software; you can redistribute it and/or modify it
+under the terms of the Artistic License (see the file COPYING included
+with the distribution).
+"""
 import os
 import sys
 import stat
@@ -48,7 +54,8 @@ def main():
           packages=['Drseqpipe'],
           package_data={'Drseqpipe': ['Config/Drseq_template.conf',
                                   'Rscript/analysis.r',
-                                  'Rscript/individual_qc.r'
+                                  'Rscript/individual_qc.r',
+                                  'Rscript/readsbulkQC.r'
                                      ]},
           scripts=['bin/Drseq.py'],
                     

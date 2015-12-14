@@ -51,7 +51,7 @@ def read_conf(conf_file):
 ### generate a config file in simple mode
 #        make_conf(args.barcode,args.reads,args.name,args.fover,args.CBL,args.UMIL,args.RF,args.P)
 
-def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P,mapindex,checkmem,maptool):
+def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P,mapindex,checkmem,maptool,select_cell,remove_lowdup):
     inf = open(CONFIG_TEMPLATE)
     name = outname
     if os.path.isfile(name+'.conf') and  not fover :
@@ -92,6 +92,11 @@ def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P
                 newline = line
         elif line.startswith('mapping_p ='):
             newline = 'mapping_p = ' + str(P) + '\n'
+        elif line.startswith('select_cell_measure ='):
+            newline = 'select_cell_measure = ' + str(select_cell) + '\n'
+        elif line.startswith('remove_non_dup_cell ='):
+            newline = 'remove_non_dup_cell = ' + str(remove_lowdup) + '\n'
+
         else:
             newline = line
         outf.write(newline)

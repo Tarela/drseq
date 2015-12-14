@@ -17,6 +17,7 @@ def textformat           (inp)
 def createDIR            (dirname)
 def strlatexformat       (instr)
 def strdis               (str1,str2)
+def sample_down_transform_sam (samfile,outbed,sampledownsam,sampledownbed,sample_reads)
 def transform_refgene    (refgene,ttsdis,outname)
 def reform_barcode_fastq (fq,reformtxt,cbL,umiL)
 def combine_reads        (barcodeF,cdsF,utr3F,utr5F,symbolF,ttsdisF,outF,dup_measure)
@@ -25,6 +26,8 @@ def generate_matrix      (refgene,inputbed,ttsdis,qcmatfull,qcmat,expmat,coverGN
 import subprocess
 import sys
 import os
+import math
+import random
 
 def CMD(cmd):
     os.system(cmd)
@@ -149,10 +152,76 @@ def strlatexformat(instr):
     outstr = instr.replace('_','\_')
     return(outstr)
     
-def transform_refgene(refgene,ttsdis,outname):
-
+def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sample_reads,q30filter):
     '''
-    transfer full gene annotation downloaded from UCSC to different meterials used in Dr.seq
+    transform aligned samfile to bed file, and randomly sample N reads to a small samfile (for reads/bulk QC)
+    '''
+    q30 = int(q30filter)
+    inf = open(samfile)
+    outbed = open(outBed,'w')
+    outSDbed = open(sampledown_bed,'w')
+    outSDsam = open(sampledown_sam,'w')
+
+   # totalN = int(sp('wc -l %s'%(samfile))[0].split()[0]) - headline_N
+   # p = 10000 * (int(sample_reads)*1.0/totalN)
+    totalN = 0
+    for line in inf:
+        if line.startswith('@'):
+            outSDsam.write(line)
+            continue
+        ll = line.strip().split("\t")
+        chrom = ll[2]
+        start = int(ll[3])-1
+        seqlen = len(ll[9])
+        end = start + seqlen
+        txname = ll[0]
+        mapQ = ll[4]
+        if ll[2] == "0":
+            strand = "+"
+        elif ll[2] == "16":
+            strand = "-"
+        else:
+            continue
+        totalN += 1
+        if q30 == 1 and int(mapQ) < 30:
+            continue
+        newll = [chrom,start,end,txname,'255',strand]
+        outbed.write("\t".join(map(str,newll))+"\n")
+    outbed.close()
+
+    inf.seek(0)
+    p = 10000 * (int(sample_reads)*1.0/totalN)
+
+    for line in inf:
+        if line.startswith('@'):
+            outSDsam.write(line)
+            continue
+        ll = line.strip().split("\t")
+        chrom = ll[2]
+        start = int(ll[3])-1
+        seqlen = len(ll[9])
+        end = start + seqlen
+        txname = ll[0]
+        mapQ = ll[4]
+        if ll[2] == "0":
+            strand = "+"
+        elif ll[2] == "16":
+            strand = "-"
+        else:
+            continue
+        totalN += 1
+        if random.randint(1,10000) <= p:
+            outSDsam.write(line)
+            newll = [chrom,start,end,txname,'255',strand]
+            outSDbed.write("\t".join(map(str,newll))+"\n")
+    outSDbed.close()
+    outSDsam.close()
+    inf.close()
+
+    
+def transform_refgene(refgene,ttsdis,outname):
+    '''
+    transform full gene annotation downloaded from UCSC to different meterials used in Dr.seq
     including
     1. CDS exon 
     2. 5' utr exon
@@ -168,10 +237,11 @@ def transform_refgene(refgene,ttsdis,outname):
     utr5_list = []
     utr3_list = []    
     CDSexon_list = []
+    Exon_list = [] ### only consider exon, do not divide utr and cds, for genebody coverage
     transcript_list = []
     symbol_dict = {}    
     TTS400_list = []
-    refbed_list = []
+    GBbin_list = []
     for line in inf:
         if line.startswith('#'):
             continue
@@ -193,6 +263,9 @@ def transform_refgene(refgene,ttsdis,outname):
             exonlength.append(exonEnds[i] - exonStarts[i])
             exondisTss.append(exonStarts[i] - txStart)
 	    
+	    total_exon_length = sum(exonlength)*1.0
+	    bin_length = total_exon_length/100
+	    
         if strand == "+" :
             TSS = txStart
             TTS = txEnd
@@ -200,7 +273,7 @@ def transform_refgene(refgene,ttsdis,outname):
             TSS = txEnd
             TTS = txStart
         ### collect transcript info
-        refbed_list.append([chrom,txStart,txEnd,txName,'0',strand,cdsStart,cdsEnd,'0',exonCount,",".join(map(str,exonlength))+",",",".join(map(str,exondisTss))+","])
+        #refbed_list.append([chrom,txStart,txEnd,txName,'0',strand,cdsStart,cdsEnd,'0',exonCount,",".join(map(str,exonlength))+",",",".join(map(str,exondisTss))+","])
         transcript_list.append([chrom,txStart,txEnd,txName,symbol,strand])
         TTS400_list.append([chrom,max(0,TTS-int(ttsdis)),TTS+int(ttsdis)])
         mergeYes = 0
@@ -220,6 +293,7 @@ def transform_refgene(refgene,ttsdis,outname):
                 symbol_dict[symbol].append([chrom,txStart,txEnd])
                     
         for st,end in zip(exonStarts,exonEnds):
+            Exon_list.append([st,end])
             if st < cdsStart:
                 utr_st = st
                 utr_end = min(end,cdsStart)
@@ -234,10 +308,52 @@ def transform_refgene(refgene,ttsdis,outname):
                     CDSexon_list.append([chrom,st,cdsEnd])
             if st >= cdsStart and end <= cdsEnd:
                 CDSexon_list.append([chrom,st,end])
-    
+        
+        ### output 100 bins for exons
+        exonnum = 0
+        current_position = exonStarts[exonnum]
+        for N in range(100):
+            Nlen = math.floor(bin_length*(N+1))-math.floor(bin_length*N)
+            if Nlen < exonEnds[exonnum] - current_position:
+                # this exon is enough to support this bin
+                newll = [chrom,int(current_position),int(current_position+Nlen),txName,symbol,strand,N]
+                GBbin_list.append(newll)
+                current_position = current_position + Nlen
+            elif Nlen == exonEnds[exonnum] - current_position:
+                newll = [chrom,int(current_position),int(current_position+Nlen),txName,symbol,strand,N]
+                GBbin_list.append(newll)
+                if N < 99:
+                    exonnum += 1
+                    current_position = exonStarts[exonnum]
+            else:
+                # this exon is not enough, add parts of next exon
+                newll = [chrom,int(current_position),int(exonEnds[exonnum]),txName,symbol,strand,N]
+                GBbin_list.append(newll)
+                leftlen = Nlen - (exonEnds[exonnum] - current_position)
+                while 1:
+                    exonnum += 1
+                    current_position = exonStarts[exonnum]
+                    if leftlen < exonEnds[exonnum] - current_position:
+                        newll = [chrom,int(current_position),int(current_position+leftlen),txName,symbol,strand,N]
+                        GBbin_list.append(newll)
+                        current_position = current_position + leftlen
+                        break
+                    elif leftlen == exonEnds[exonnum] - current_position:
+                        newll = [chrom,int(current_position),int(current_position+leftlen),txName,symbol,strand,N]
+                        GBbin_list.append(newll)
+                        if N < 99:
+                            exonnum += 1
+                            current_position = exonStarts[exonnum]
+                        break
+                    else:
+                        newll = [chrom,int(current_position),int(exonEnds[exonnum]),txName,symbol,strand,N]
+                        GBbin_list.append(newll)
+                        leftlen = leftlen - (exonEnds[exonnum] - current_position)
+                    
+                    
     ### output tx information
-    outf = open(outname + '_gene_anno_fullbed.bed','w')
-    for i in refbed_list:
+    outf = open(outname + '_gene_anno_binexon.bed','w')
+    for i in GBbin_list:
         outf.write("\t".join(map(str,i))+"\n")
     outf.close()        
     
@@ -479,6 +595,112 @@ def generate_matrix(refgene,inputbed,ttsdis,qcmatfull,qcmat,expmat,coverGNcutoff
     outf0.close()  
     outf1.close()
     outf2.close()
+  
+def readsqc(SDsamfile,outname):
+
+    inf = open(SDsamfile)
+    test_line_number = 0
+    while 1:
+        line = inf.readline()
+        if line.strip() == "":
+            continue
+        if line.startswith("@"):
+            continue
+        ll = line.strip().split("\t")
+        if len(ll) < 11:
+            continue
+        seq = ll[9]
+        seqlen = len(seq)
+        test_line_number += 1
+        if test_line_number == 10:
+            break
+    inf.seek(0)    
+
+    readsQuality = {}
+    NVC = {}
+    NVC['A'] = [0]*seqlen
+    NVC['C'] = [0]*seqlen
+    NVC['G'] = [0]*seqlen
+    NVC['T'] = [0]*seqlen
+    GCsummary = {}
+    for i in range(seqlen+1):
+        GCsummary[i] = 0
+    for line in inf:
+        if line.strip() == "":
+            continue
+        ll = line.split()
+        if len(ll) < 11:
+            continue
+        if ll[1] == '0':
+            strand = "+"
+            thisseq = ll[9]
+            thisQuality = ll[10]
+    
+        elif ll[1]  == '16':
+            strand = '-'
+            thisseq = ll[9][::-1]
+            thisQuality = ll[10][::-1]
+        else:
+            continue
+        thisseq = ll[9]
+        thisQuality = ll[10]
+        if len(thisseq) != seqlen:
+            continue
+        ### GC 
+        GCnumber = 0
+        for position in range(len(thisseq)):
+            bp = thisseq[position].upper()
+            qul = ord(thisQuality[position])-33
+            if not readsQuality.has_key(qul):
+                readsQuality[qul] = [0]*seqlen
+            readsQuality[qul][position] += 1
+            if bp in ['A','C','G','T']:
+                NVC[bp][position] += 1
+            if bp == "G" or bp == "C":
+                GCnumber += 1
         
+        #if not GCsummary.has_key(GCnumber):
+        #    GCsummary[GCnumber] = 0
+        GCsummary[GCnumber] += 1
         
-   
+    inf.close()
+    
+    GCoutf = open(outname+'_qcGC.txt','w')
+    for i in range(seqlen+1):
+        newll = [i,GCsummary[i],seqlen]
+        GCoutf.write("\t".join(map(str,newll))+"\n")
+    GCoutf.close()
+    
+    QULoutf = open(outname+'_qcQul.txt','w')
+    for i in range(max(readsQuality.keys())+1):
+        if readsQuality.has_key(i):
+            newll = [i]+readsQuality[i]
+        else:
+            newll = [i] + [0]*seqlen
+        QULoutf.write("\t".join(map(str,newll))+"\n")
+    QULoutf.close()
+    
+    NVCoutf = open(outname+'_qcNVC.txt','w')
+    for i in ['A','C','G','T']:
+        newll = [i]+NVC[i]
+        NVCoutf.write("\t".join(map(str,newll))+"\n")
+    NVCoutf.close()
+      
+
+def GBcover(SDreads_on_gbbin,outname):
+    inf= open(SDreads_on_gbbin)
+    gbcount = [0]*100
+    for line in inf:
+        ll = line.split()
+        if ll[5] == "-":
+            gbcount[99-int(ll[6])]+=int(ll[7])
+        else:
+            gbcount[int(ll[6])]+=int(ll[7])
+    inf.close()
+    outf = open(outname+'_qcGBcover.txt','w')
+    for i in range(len(gbcount)):
+        newll = [i+1,gbcount[i]]
+        outf.write("\t".join(map(str,newll))+"\n")
+    outf.close()
+            
+       
