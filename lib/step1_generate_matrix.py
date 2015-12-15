@@ -108,14 +108,14 @@ def step1_generate_matrix(conf_dict,logfile):
     createDIR(expdir)
     os.chdir(expdir)
     
-    ### use bedtools(intersectBed function) to assign exon/intron/intergenic/overlapping gene  information to all reads
+    ### use bedtools(intersect function) to assign exon/intron/intergenic/overlapping gene  information to all reads
     ### sort according to name
     wlog('add gene annotation on aligned bed file',logfile)
-    cmd1 = "intersectBed -a %s -b %s  -wo   | sort -k 4,4 - >  %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_symbol.bed',conf_dict['General']['outname']+'_on_symbol.bed')
-    cmd2 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_cds.bed',conf_dict['General']['outname']+'_on_cds.bed')
-    cmd3 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_3utr.bed',conf_dict['General']['outname']+'_on_3utr.bed')
-    cmd4 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_5utr.bed',conf_dict['General']['outname']+'_on_5utr.bed')
-    cmd5 = "intersectBed -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_TTSdis.bed',conf_dict['General']['outname']+'_on_TTSdis.bed')
+    cmd1 = "bedtools intersect -a %s -b %s  -wo   | sort -k 4,4 - >  %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_symbol.bed',conf_dict['General']['outname']+'_on_symbol.bed')
+    cmd2 = "bedtools intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_cds.bed',conf_dict['General']['outname']+'_on_cds.bed')
+    cmd3 = "bedtools intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_3utr.bed',conf_dict['General']['outname']+'_on_3utr.bed')
+    cmd4 = "bedtools intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_5utr.bed',conf_dict['General']['outname']+'_on_5utr.bed')
+    cmd5 = "bedtools intersect -a %s -b %s -c | sort -k 4,4 - > %s"%(conf_dict['General']['bed'],annotation_dir+conf_dict['General']['outname']+'_gene_anno_TTSdis.bed',conf_dict['General']['outname']+'_on_TTSdis.bed')
     rwlog(cmd1,logfile)
     rwlog(cmd2,logfile)
     rwlog(cmd3,logfile)
