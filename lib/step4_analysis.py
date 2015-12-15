@@ -48,7 +48,7 @@ def step4_analysis(conf_dict,logfile):
     conf_dict['results']['clusterresult'] = analysisdir + conf_dict['General']['outname']+'_cluster.txt'
     
     cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%('Rscript',conf_dict['rscript']+'analysis.r',conf_dict['results']['expmatcc'],conf_dict['General']['outname'],conf_dict['Step4_Analysis']['highvarz'],conf_dict['Step4_Analysis']['selectpccumvar'],conf_dict['Step4_Analysis']['rdnumber'],conf_dict['Step4_Analysis']['maxknum'],conf_dict['Step4_Analysis']['pctable'],conf_dict['Step4_Analysis']['cortable'],conf_dict['Step4_Analysis']['clustering_method'],conf_dict['Step4_Analysis']['custom_k'],conf_dict['Step4_Analysis']['custom_d'])
-    rwlog(cmd,logfile,conf_dict['General']['dryrun'])
+    rwlog(cmd,logfile)
     wlog("Step4 analysis QC DONE",logfile)
     analysisqctime = time.time()-t
     wlog("time for cell clustering qc: %s"%(analysisqctime),logfile)

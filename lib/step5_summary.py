@@ -48,12 +48,10 @@ def step5_summary(conf_dict,logfile):
     os.chdir(plot_folder)
     ### collect results 
     for i in conf_dict['QCplots']:
-    
         if os.path.isfile(conf_dict['QCplots'][i]):
             #realname
             cmd = 'cp %s .'%conf_dict['QCplots'][i]
-#            rwlog(cmd,logfile,conf_dict['General']['dryrun'])
-            rwlog(cmd,logfile,0)
+            rwlog(cmd,logfile)
 
     result_folder = summarydir + "results/"
     createDIR(result_folder)
@@ -61,9 +59,10 @@ def step5_summary(conf_dict,logfile):
     for i in conf_dict['results']:
         if os.path.isfile(conf_dict['results'][i]):
             cmd = 'cp %s .'%conf_dict['results'][i]
-#            rwlog(cmd,logfile,conf_dict['General']['dryrun'])
-            rwlog(cmd,logfile,0)
-    
+            rwlog(cmd,logfile)
+
+    os.chdir(summarydir)
+
     wlog('generate qc documents',logfile)
     ### initiate 
     QCdoc = """\documentclass[11pt,a4paper]{article}
@@ -300,8 +299,7 @@ intergenic UMI count & %s (%s\\%%)** \\\\
      textformat(str(conf_dict['Mapping_stat']['intergenicN'])),
      str( round(100*conf_dict['Mapping_stat']['intergenicN']*1.0/conf_dict['Mapping_stat']['umi_gene'], 2)))
      ### genebody coverage
-    if bulk_qc == "True":
-        QCdoc += """
+    QCdoc += """
 \\newpage
 \\newpage
 \subsection{Gene body coverage}
@@ -523,26 +521,26 @@ summary QC report & %s \\\\
     outf.write(QCdoc)
     outf.close()
     cmd = "pdflatex %s"%(latexfile)
-    rwlog(cmd,logfile,conf_dict['General']['dryrun'])
+    rwlog(cmd,logfile)
 #    rwlog(cmd,logfile,0)
 #    rwlog(cmd,logfile,0)
 
     if conf_dict['clean']:
         wlog('clean pararmeter was turned on, remove internal files',logfile)
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_symbol.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_cds.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_3utr.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_5utr.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_TTSdis.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_combined.bed'),logfile,conf_dict['General']['dryrun'])
-        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_barcode_reform.txt'),logfile,conf_dict['General']['dryrun'])
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_symbol.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_cds.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_3utr.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_5utr.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_TTSdis.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_combined.bed'),logfile)
+        rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_barcode_reform.txt'),logfile)
 
     for files in os.listdir(summarydir):
         if os.path.isfile(files) and files[-12:-4] == "_summary":
             if not files[-4:] in ['.tex','.pdf']:
                 cmd = "rm %s"%(files)
-                rwlog(cmd,logfile,0)
-#                rwlog(cmd,logfile,conf_dict['General']['dryrun'])
+                rwlog(cmd,logfile)
+#                rwlog(cmd,logfile)
 
     wlog('Step5 summary DONE, check %s for final outputs'%(summarydir),logfile)
 

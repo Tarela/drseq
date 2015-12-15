@@ -99,7 +99,7 @@ def ewlog(message,logfile):
     os.system('echo "[ERROR] %s " >> %s'%(message,logfile))
     raise_error()
     
-def rwlog(cmd,logfile,DR) :
+def rwlog(cmd,logfile) :
     '''
     print an (shell) command line and write the command line to logfile
     then conduct the command line
@@ -107,12 +107,7 @@ def rwlog(cmd,logfile,DR) :
     '''
     print "[CMD] %s "%(cmd)
     os.system('echo "[CMD] %s " >> %s'%(cmd,logfile))
-    if int(DR) == 1:
-        pass
-    elif int(DR) == 0:
-        CMD(cmd)
-    else:
-        ewlog('dryrun can only be set 0/1',logfile)
+    CMD(cmd)
    
     
 def readAnnotation(annotation):
@@ -641,8 +636,6 @@ def readsqc(SDsamfile,outname):
             thisQuality = ll[10][::-1]
         else:
             continue
-        thisseq = ll[9]
-        thisQuality = ll[10]
         if len(thisseq) != seqlen:
             continue
         ### GC 

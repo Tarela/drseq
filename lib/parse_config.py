@@ -58,10 +58,6 @@ def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P
         print 'config file "%s" using same name exist , choose other name or add -f to overwrite'%(name+".conf")
         sys.exit(1)
     outf = open(name+".conf",'w')
-    if geneanno:
-        print 1
-    else :
-        print 0
     for line in inf:
         if line.startswith('barcode_file ='):
             newline = 'barcode_file = ' + barcode_file + '\n'

@@ -109,8 +109,6 @@ def parse_args():
                              help = "specify the config file to create output folder , this cmd will rm existing result if set True ~!! " )
     simple_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
                              help = "remove intermediate result generated during Dr.seq,default is No" )
-    simple_parser.add_argument("--dryrun",dest='dryrun' , default=False, action='store_true',
-                             help = "Only print ALL cmd and description with out processing if set, default False" )
     simple_parser.add_argument("--select_cell_measure",dest='select_cell_measure' , choices = ("1", "2"), default="1",
                              help = "Method to select STAMPs from cell_barcodes, choose from 1 or 2 (default is 1), 1: Cell_barcodes with more than 1000 genes covered are selected. 2: Top 1000 cell_harcodes with highest umi count will be selected" )
     simple_parser.add_argument("--remove_low_dup_cell",dest='remove_low_dup_cell' , choices = ("0", "1"), default="1",
@@ -192,13 +190,7 @@ def main():
     #CONFIG_TEMPLATE = os.path.join(Drseq_pipe.__path__[0], "Config/Drseq_template.conf")
     conf_dict['rscript'] = os.path.join(Drseqpipe.__path__[0], "Rscript/")#'/mnt/Storage3/CR/Dropseq/drseq/Rscript/'
     conf_dict['clean'] = args.Clean
-    
-    ### check dryrun
-    if args.dryrun:
-        conf_dict['General']['dryrun'] = 1
-    else:
-        conf_dict['General']['dryrun'] = 0
-    
+        
     ### main step for Dr.seq , see individual script for detail note.
     # preparing step, integrate parameter, prepare for following step
     t = time.time()

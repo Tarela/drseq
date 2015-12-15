@@ -21,7 +21,7 @@ names(duprate) <- row.names(qcdata)
 
 #nodup_cell <- names(duprate)[which(duprate < non_dup_cutoff)]
 
-pdf(file=paste(outname,"_duprate.pdf",sep=""))
+pdf(file=paste(outname,"_Figure5_duprate.pdf",sep=""))
 hist(duprate,breaks=200,border="blue",xlab="Reads duplicate rate\n(#mappable reads-#UMI)/#mappable reads",freq=T,main="")
 abline(v=non_dup_cutoff,col="darkblue",lwd=3)
 legend("top",lwd=3,col="darkblue",legend="cutoff of cell barcodes\nwith low duplcate rate",bty="n",cex=1.2)
@@ -45,9 +45,9 @@ if (remove_nondup == 1){
 }
 ### qc2 plot , and output cluster cell name to "cluster_cell_name"
 if (pngplot == 1){
-    png(file=paste(outname,"_umi_coverGN.png",sep=""))
+    png(file=paste(outname,"_Figure7_umi_coverGN.png",sep=""))
 }else{
-    pdf(file=paste(outname,"_umi_coverGN.pdf",sep="")) 
+    pdf(file=paste(outname,"_Figure7_umi_coverGN.pdf",sep="")) 
 }
 plot(qc2matrix,xlab="log10 #UMI",ylab="log10 #covered gene",pch=".",col="red")
 ### use covered gene number as cutoff
@@ -85,9 +85,9 @@ dev.off()
 
 ### individual qc3 :  cumulative umi v.s. duprate or cumulative covered GN v.s. duprate
 if (pngplot == 1){
-    png(file=paste(outname,"_cumUMI_duprate.png",sep=""))
+    png(file=paste(outname,"_Figure6_cumUMI_duprate.png",sep=""))
 }else{
-    pdf(file=paste(outname,"_cumUMI_duprate.pdf",sep=""))
+    pdf(file=paste(outname,"_Figure6_cumUMI_duprate.pdf",sep=""))
 }
 ### use covered gene as cutoff
 ### generate cumulative detected gene number curve, overwrite on the scatter plot of duplicate rate
@@ -140,12 +140,12 @@ real_expdata <- expdata[,cluster_cell_name]
 
 intron_exon_ratio <- real_qcdata[,'intron']/(real_qcdata[,'utr3']+real_qcdata[,'utr5']+real_qcdata[,'cds']+real_qcdata[,'intron'])
 
-pdf(file=paste(outname,"_intronrate.pdf",sep=""))
+pdf(file=paste(outname,"_Figure9_intronrate.pdf",sep=""))
 hist(intron_exon_ratio,n=200,border="blue",xlab="Intron rate",main="")
 dev.off()
 
 ###  qc5 cover gene number distribution
-pdf(file=paste(outname,"_coverGN.pdf",sep=""))
+pdf(file=paste(outname,"_Figure8_coverGN.pdf",sep=""))
 hist(log10(coverGN[cluster_cell_name]),border="blue",n=200,main='',xlab="log10 #covered genes")
 dev.off()
 
