@@ -439,12 +439,12 @@ if(cortableY == 1){
 selectPC <- max(10,length(which(summary(PCAresult)[[6]][3,]< selectPCcutoff)))
 compdata <- as.matrix(scPCAdata) %*% as.matrix(PCAresult[2]$rotation)[,1:selectPC]
 set.seed(RDnumber)
-tsne_result <- ref_tsne(compdata,max_iter=200)
+tsne_result <- ref_tsne(compdata,max_iter=1000)
 #write.table(tsne_result,file="a.txt",row.names=F,col.names=F,sep="\t",quote=F)
 #tsne_result <- read.table("a.txt")
 
-gap_plot <- paste(outname,'_GapStat.pdf',sep="")
-cluster_plot <- paste(outname,'_cluster.pdf',sep="")
+gap_plot <- paste(outname,'_Figure10_GapStat.pdf',sep="")
+cluster_plot <- paste(outname,'_Figure11_cluster.pdf',sep="")
 if (clustering_method == 4){
     ### if user choose dbscan
     final_result <- givenE_dbscan(tsne_result,custom_d,cluster_plot)

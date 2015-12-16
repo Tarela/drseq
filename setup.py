@@ -12,9 +12,6 @@ import subprocess
 from distutils.core import setup, Extension
 
 
-if sys.version_info[0] != 2 or sys.version_info[1] < 7:
-	print >> sys.stderr, "ERROR: Dr.seq requires Python 2.7"
-	sys.exit()
 
 def sp(cmd):
     '''
@@ -23,11 +20,11 @@ def sp(cmd):
     a=subprocess.Popen(cmd, stdout=subprocess.PIPE, shell='TRUE')
     ac = a.communicate()
     return ac
-	
+
 def compile_bedtools():
     curdir = os.getcwd()
     os.chdir('refpackage/bedtools')
-    sp('make > makeoutput.out')
+    sp('make 1>/dev/null 2>&1 ')
     sp('chmod 755 *')
     os.chdir(curdir)
     
@@ -37,17 +34,25 @@ def check_bedtools():
         return 0
     else:
         return 1
-        
+def check_R():
+    checkhandle = sp('which Rscript')
+    if checkhandle[0].strip() == "":
+        return 0
+    else:
+        return 1       
 def main():
-    if not float(sys.version[:3])>=2.6:
-        sys.stderr.write("CRITICAL: Python version must be greater than or equal to 2.4! python 2.6.1 is recommended!\n")
-        sys.exit(1)
+    if sys.version_info[0] != 2 or sys.version_info[1] < 7:
+	    print >> sys.stderr, "ERROR: Dr.seq requires Python 2.7"
+	    sys.exit()
+    has_R = check_R()
+    if has_R == 0:
+	    print >> sys.stderr, "ERROR: Dr.seq requires R & Rscript under default PATH"
+	    sys.exit()
+        
     has_bedtools = check_bedtools()
+    print 'Intalling Dr.seq, may take serval minutes'
     if has_bedtools == 0:
-        print 'bedtools is not detected under default PATH, now installing bedtools'
-        print 'The installation of bedtools will take serval minutes'
         compile_bedtools()
-        print 'bedtools compiled, now installing Dr.seq'
         setup(name="Drseqpipe",
               version="1.0",
               description="Drseq: Drop-seq QC and analysis pipeline",
@@ -74,9 +79,10 @@ def main():
             ],
               requires=[],
           )
+        print 'bedtools is not detected under default PATH, bedtools is also installed'
+        print 'Installation of Dr.seq is DONE'
     
     else:
-        print 'bedtools detected, now installing Dr.seq' 
         setup(name="Drseqpipe",
               version="1.0",
               description="Drseq: Drop-seq QC and analysis pipeline",
@@ -103,6 +109,7 @@ def main():
             ],
               requires=[],
           )
+        print 'Installation of Dr.seq is DONE'
 
 
 if __name__ == '__main__':

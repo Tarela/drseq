@@ -241,9 +241,9 @@ Distribution of GC content of each read.
         \centering
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
-"""%((conf_dict['QCplots']['read_qul']),
-     (conf_dict['QCplots']['read_nvc']),
-     (conf_dict['QCplots']['read_gc'])
+"""%((conf_dict['QCplots']['read_qul'].split("/")[-1]),
+     (conf_dict['QCplots']['read_nvc'].split("/")[-1]),
+     (conf_dict['QCplots']['read_gc'].split("/")[-1])
     )
 
     QCdoc += """
@@ -313,7 +313,7 @@ Aggregate plot of reads coverage on all genes. Theoretically we observe a unimod
         \centering
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
-"""%((conf_dict['QCplots']['gb_cover']))
+"""%((conf_dict['QCplots']['gb_cover'].split("/")[-1]))
 
     QCdoc += """
 
@@ -332,7 +332,7 @@ Drop-seq technology has an innate advantage of detect duplicate reads and amplif
         \centering
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
-"""%(conf_dict['QCplots']['duprate'])
+"""%(conf_dict['QCplots']['duprate'].split("/")[-1])
     if int(conf_dict['Step3_QC']['select_cell_measure']) == 1:
         QCdoc += """
 \\newpage
@@ -362,8 +362,8 @@ Covered gene number was plotted as a function of the number of UMI (i.e. unique 
         \centering
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
-"""%(conf_dict['QCplots']['cumumiduprate'],
-     conf_dict['QCplots']['umicovergn'])
+"""%(conf_dict['QCplots']['cumumiduprate'].split("/")[-1],
+     conf_dict['QCplots']['umicovergn'].split("/")[-1])
     else:
         QCdoc += """
 \\newpage
@@ -393,8 +393,8 @@ Covered gene number was plotted as a function of the number of UMI (i.e. unique 
         \centering
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
-"""%(conf_dict['QCplots']['cumumiduprate'],
-     conf_dict['QCplots']['umicovergn'])
+"""%(conf_dict['QCplots']['cumumiduprate'].split("/")[-1],
+     conf_dict['QCplots']['umicovergn'].split("/")[-1])
      
     QCdoc += """
 \\newpage
@@ -425,8 +425,8 @@ Intron rate is a effective method to measure the quality of a RNA-seq sample. We
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
  
-"""%(conf_dict['QCplots']['covergn'],
-     conf_dict['QCplots']['intronrate'])
+"""%(conf_dict['QCplots']['covergn'].split("/")[-1],
+     conf_dict['QCplots']['intronrate'].split("/")[-1])
     
     if int(conf_dict['Step4_Analysis']['clustering_method']) in [3,4]:
         pass
@@ -452,7 +452,7 @@ We conducted a k-means clustering based on t-SNE dimentional reduction output. G
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
 
-"""%(selectM,conf_dict['QCplots']['gapstat'])
+"""%(selectM,conf_dict['QCplots']['gapstat'].split("/")[-1])
     
     QCdoc += """
 \\newpage
@@ -469,7 +469,7 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
         {\includegraphics[width=0.8\\textwidth]{%s}}
 \end{figure}
  
-"""%(conf_dict['QCplots']['cluster'])
+"""%(conf_dict['QCplots']['cluster'].split("/")[-1])
     
     QCdoc += """
 \\newpage
@@ -512,21 +512,30 @@ summary QC report & %s \\\\
 \end{document} 
 """%(strlatexformat(conf_dict['results']['clusterresult'].split("/")[-1]),conf_dict['General']['outname']+"\_summary.pdf")
 
-    outf = open(conf_dict['General']['outname']+"_summary.tex",'w')
-    outf.write(QCdoc)
-    outf.close()
-    
+    os.chdir(plot_folder)
+
     latexfile = conf_dict['General']['outname'] + '_summary.tex'
     outf = open(latexfile,'w')
     outf.write(QCdoc)
     outf.close()
     cmd = "pdflatex %s"%(latexfile)
-    rwlog(cmd,logfile)
-#    rwlog(cmd,logfile,0)
-#    rwlog(cmd,logfile,0)
-
+    cmd2 = 'cp %s %s'%(conf_dict['General']['outname'] + '_summary.pdf',summarydir)
+    if conf_dict['General']['latex'] == 1:
+        rwlog(cmd,logfile)
+        rwlog(cmd,logfile)
+        rwlog(cmd2,logfile)
+        for files in os.listdir(plot_folder):
+            if os.path.isfile(files) and files[-12:-4] == "_summary":
+                if not files[-4:] in ['.tex','.pdf',',png','.txt']:
+                    cmd = "rm %s"%(files)
+                    rwlog(cmd,logfile)
+        wlog('pdflatex was detected in default PATH, generate summary report %s'%('summary/'+conf_dict['General']['outname'] + '_summary.pdf'),logfile)
+    else:
+        wlog('pdflatex was not detected in default PATH, generate summary report .tex file in summary/plots folder, you can move the whole folder to the environment with pdflatex installed and run cmd: "pdflatex %s"'%(conf_dict['General']['outname'] + '_summary.tex'),logfile)
+   
+        
     if conf_dict['clean']:
-        wlog('clean pararmeter was turned on, remove internal files',logfile)
+        wlog('--clean pararmeter was turned on, remove internal files with large size',logfile)
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_symbol.bed'),logfile)
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_cds.bed'),logfile)
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_3utr.bed'),logfile)
@@ -534,13 +543,6 @@ summary QC report & %s \\\\
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_on_TTSdis.bed'),logfile)
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_combined.bed'),logfile)
         rwlog("rm %s "%(conf_dict['General']['outputdirectory'] + 'expmatrix/' + conf_dict['General']['outname']+'_barcode_reform.txt'),logfile)
-
-    for files in os.listdir(summarydir):
-        if os.path.isfile(files) and files[-12:-4] == "_summary":
-            if not files[-4:] in ['.tex','.pdf']:
-                cmd = "rm %s"%(files)
-                rwlog(cmd,logfile)
-#                rwlog(cmd,logfile)
 
     wlog('Step5 summary DONE, check %s for final outputs'%(summarydir),logfile)
 

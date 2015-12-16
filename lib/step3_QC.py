@@ -127,6 +127,7 @@ intergenic UMI count\t%s
 #       rwlog(mvcmd3,logfile)
 #       rwlog(mvcmd4,logfile)
 #
+
     conf_dict['QCplots']['read_qul'] = qcdir + conf_dict['General']['outname'] + '_Figure1_quality_heatmap.pdf'
     conf_dict['QCplots']['read_nvc'] = qcdir + conf_dict['General']['outname'] + '_Figure2_NVC.pdf'
     conf_dict['QCplots']['read_gc'] = qcdir + conf_dict['General']['outname'] + '_Figure3_GC.pdf'

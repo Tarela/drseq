@@ -41,8 +41,8 @@ def step4_analysis(conf_dict,logfile):
     createDIR(analysisdir)
     os.chdir(analysisdir)
 
-    conf_dict['QCplots']['gapstat'] = analysisdir + conf_dict['General']['outname']+'_GapStat.pdf'
-    conf_dict['QCplots']['cluster'] = analysisdir + conf_dict['General']['outname']+'_cluster.pdf'
+    conf_dict['QCplots']['gapstat'] = analysisdir + conf_dict['General']['outname']+'_Figure10_GapStat.pdf'
+    conf_dict['QCplots']['cluster'] = analysisdir + conf_dict['General']['outname']+'_Figure11_cluster.pdf'
     conf_dict['results']['pctable'] = analysisdir + conf_dict['General']['outname']+'_pctable.txt'    
     conf_dict['results']['cortable'] = analysisdir + conf_dict['General']['outname']+'_correlation_table.txt' 
     conf_dict['results']['clusterresult'] = analysisdir + conf_dict['General']['outname']+'_cluster.txt'

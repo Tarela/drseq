@@ -35,6 +35,9 @@ def step0_integrate_data(conf_dict,logfile):
     wlog("Start Drseq",logfile)
     wlog("Step0: Data integrate",logfile)
     
+    ### check output name
+    if "/" in conf_dict['General']['outname']:
+        ewlog("outname is the name of all your output result, cannot contain "/", current outname is  %s"%(conf_dict['General']['outname']),logfile)
     ### check data path , format ,
     if not "/" in conf_dict['General']['barcode_file'].strip("/"):
         conf_dict['General']['barcode_file'] = conf_dict['General']['startdir'] + conf_dict['General']['barcode_file']
@@ -166,6 +169,9 @@ def step0_integrate_data(conf_dict,logfile):
     ### check pdflatex
     if sp('pdflatex --help')[0] == "":
         wlog('pdflatex was not installed, Dr.seq is still processing but no summary QC report generated',logfile)
+        conf_dict['General']['latex'] = 0
+    else:
+        conf_dict['General']['latex'] = 1
 
     wlog('Step0 Data integrate DONE',logfile)
 

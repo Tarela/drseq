@@ -122,6 +122,7 @@ if(measure == 1){
     duprate_mat <- cbind(seq(length(csumi)),(duprate[names(csumi)]))
  
     smoothScatter(duprate_mat,xlab="Cell barcodes ordered by UMI count from high to low",ylab="Reads duplicate rate")
+    abline(v=measure_cutoff,col="purple",lwd=2,lty=2)
     par(new=T)
     #plot(csumi_matlog,type="l",lwd=2,col="purple",xlab="",ylab="",main="",axes=F)
     #par(new=T)
@@ -129,7 +130,6 @@ if(measure == 1){
     axis(side=4)
     mtext("cumulative UMI%",4)
     legend("topright",legend=c("reads duplicate rate (left axis)","cumulative UMI% (right axis)"),col=c("blue","red"),lwd=3,bty="n",cex=1.2)
-    abline(v=measure_cutoff,col="purple",lwd=2,lty=2)
 }
 dev.off()
 
