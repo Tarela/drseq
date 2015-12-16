@@ -95,7 +95,7 @@ intergenic UMI count\t%s
     readsqc(conf_dict['General']['sampledownsam'],conf_dict['General']['outname'])
     wlog('generate bulk cell QC measurement with own script, based on sample down reads',logfile)
 
-    cmd = "bedtools intersect -a %s -b %s -c > %s"%(conf_dict['General']['outname'] + '_gene_anno_binexon.bed', conf_dict['General']['sampledownbed'],conf_dict['General']['outname']+'_sampledown_on_gbbin.bed' )
+    cmd = "bedtools intersect -a %s -b %s -c > %s"%(conf_dict['General']['outputdirectory'] + 'annotation/'+ conf_dict['General']['outname'] + '_gene_anno_binexon.bed', conf_dict['General']['sampledownbed'],conf_dict['General']['outname']+'_sampledown_on_gbbin.bed' )
     rwlog(cmd,logfile)
     GBcover(conf_dict['General']['outname']+'_sampledown_on_gbbin.bed',conf_dict['General']['outname'])
     cmd = "%s %s %s"%('Rscript',conf_dict['rscript']+'readsbulkQC.r',conf_dict['General']['outname'])

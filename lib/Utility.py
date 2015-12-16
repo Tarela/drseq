@@ -162,7 +162,6 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
     totalN = 0
     for line in inf:
         if line.startswith('@'):
-            outSDsam.write(line)
             continue
         ll = line.strip().split("\t")
         chrom = ll[2]
@@ -171,12 +170,22 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
         end = start + seqlen
         txname = ll[0]
         mapQ = ll[4]
-        if ll[1] == "0":
-            strand = "+"
-        elif ll[1] == "16":
-            strand = "-"
+        flag = bin(int(ll[1]))[2:]
+        if len(flag) < 5:
+            if len(flag) < 3:
+                strand = "+"
+            else:
+                if flag[-3] == "1":
+                    continue
+                else:
+                    strand = "+"
         else:
-            continue
+            if flag[-3] == "1":
+                continue
+            elif flag[-5] == "1":
+                strand = "-"
+            else:
+                strand = "+"
         totalN += 1
         if q30 == 1 and int(mapQ) < 30:
             continue
