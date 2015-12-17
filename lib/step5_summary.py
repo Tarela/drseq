@@ -483,7 +483,7 @@ All output files were described in the following table
 \\begin{tabularx}{\\textwidth}{ |X|l| }
     
 \hline
-filename &  description \\\\
+description & filename \\\\
 \hline
 expression matrix for selected STAMPs & %s  \\\\
 \hline

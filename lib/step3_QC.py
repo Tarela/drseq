@@ -47,7 +47,7 @@ def step3_QC(conf_dict,logfile):
     conf_dict['Mapping_stat']['intergenicN'] = 0
 
     ### calculate mapping state based on QC matrix
-    inf = open(conf_dict['Step2_ExpMat']['qcmat'])
+    inf = open(conf_dict['Step2_ExpMat']['qcmatfull'])
     for line in inf:
         if line.startswith('cellname'):
             continue

@@ -28,7 +28,7 @@ import sys
 import os
 import math
 import random
-
+import string
 def CMD(cmd):
     os.system(cmd)
 
@@ -186,8 +186,8 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
                 strand = "-"
             else:
                 strand = "+"
-        totalN += 1
         if q30 == 1 and int(mapQ) < 30:
+            totalN += 1
             continue
         newll = [chrom,start,end,txname,'255',strand]
         outbed.write("\t".join(map(str,newll))+"\n")
@@ -223,6 +223,9 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
                 strand = "-"
             else:
                 strand = "+"
+        if q30 == 1 and int(mapQ) < 30:
+            totalN += 1
+            continue
         if random.randint(1,10000) <= p:
             outSDsam.write(line)
             newll = [chrom,start,end,txname,'255',strand]
@@ -644,17 +647,31 @@ def readsqc(SDsamfile,outname):
         ll = line.split()
         if len(ll) < 11:
             continue
-        if ll[1] == '0':
-            strand = "+"
-            thisseq = ll[9]
-            thisQuality = ll[10]
-    
-        elif ll[1]  == '16':
-            strand = '-'
-            thisseq = ll[9][::-1]
-            thisQuality = ll[10][::-1]
+        flag = bin(int(ll[1]))[2:]
+        if len(flag) < 5:
+            if len(flag) < 3:
+                strand = "+"
+            else:
+                if flag[-3] == "1":
+                    continue
+                else:
+                    strand = "+"
         else:
-            continue
+            if flag[-3] == "1":
+                continue
+            elif flag[-5] == "1":
+                strand = "-"
+            else:
+                strand = "+"
+
+        if strand == "+":
+            thisseq = ll[9].upper()
+            thisQuality = ll[10]
+        
+        else:
+            transtab = string.maketrans("ACGTNX","TGCANX")
+            thisseq = ll[9].upper().translate(transtab)[::-1]
+            thisQuality = ll[10][::-1]
         if len(thisseq) != seqlen:
             continue
         ### GC 
