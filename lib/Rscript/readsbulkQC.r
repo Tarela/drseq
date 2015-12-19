@@ -6,7 +6,7 @@ pdf(file=paste(outname,'Figure3_GC.pdf',sep="_"))
 gc <- rep(data[,1]/data[,3], times=data[,2])
 hist(gc,probability=T,breaks=100,xlab="GC content (%)",ylab="Density of Reads",border="blue",main="")
 dev.off()
-
+ 
 data <- read.table(paste(outname,'qcNVC.txt',sep="_"),row.names=1)
 pdf(file=paste(outname,'Figure2_NVC.pdf',sep="_"))
 position <- seq(1,ncol(data))

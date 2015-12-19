@@ -67,7 +67,7 @@ if(measure == 1){
     }
     abline(h=log10(measure_cutoff))
 ### use umi count as cutoff
-}else{
+}else{ 
     if(remove_nondup == 1){
         points(qc2matrix[which(duprate < non_dup_cutoff),],pch=".",col="blue")
         points(qc2matrix[which(umi >= umicutoff & duprate >= non_dup_cutoff),],pch=".",col="purple")

@@ -23,7 +23,7 @@ CONFIG_TEMPLATE = os.path.join(Drseqpipe.__path__[0], "Config/Drseq_template.con
 def gen_conf(CONF_name):
     '''
     Generate a config file
-    '''
+    ''' 
     inf = open(CONFIG_TEMPLATE)
     if not CONF_name.endswith('.conf'):
         CONF_name += '.conf'

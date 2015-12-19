@@ -147,7 +147,7 @@ def step0_integrate_data(conf_dict,logfile):
             int(conf_dict['Step3_QC']['topumicellnumber'])
         except:
             ewlog('topumicellnumber value should be integer, current value is %s'%(conf_dict['Step3_QC']['covergncluster']),logfile)   
-    else:
+    else: 
         ewlog('select_cell_measure value can only be 1 or 2, current value is %s'%(conf_dict['Step3_QC']['select_cell_measure']),logfile)
 
     if not int(conf_dict['Step3_QC']['remove_non_dup_cell']) in [0,1]:

@@ -40,7 +40,7 @@ def step1_generate_matrix(conf_dict,logfile):
         q30 filter, 
     for sam format:
         q30 filter     
-    '''
+    ''' 
     wlog("Step1: alignment",logfile)
     t= time.time()
     ### create mapping dir 
@@ -55,12 +55,18 @@ def step1_generate_matrix(conf_dict,logfile):
         os.chdir(mapping_dir)
         ## choose mapping tool from STAR and bowtie2 according to config file
         if conf_dict['Step1_Mapping']['mapping_software_main'] == "STAR":
+            wlog('user choose STAR as alignment software',logfile)
+            if sp('which STAR')[0].strip() == "":
+                ewlog('STAR is not detected in default PATH, make sure you installed STAR and export it into default PATH',logfile)
             mapping_cmd = 'STAR --genomeDir %s --readFilesIn %s --runThreadN %s'%(conf_dict['Step1_Mapping']['mapindex'],conf_dict['General']['reads_file'],conf_dict['Step1_Mapping']['mapping_p'])
             mapping_cmd2 = 'mv Aligned.out.sam %s.sam'%(conf_dict['General']['outname'])
             rwlog(mapping_cmd,logfile)
             rwlog(mapping_cmd2,logfile)
             
         elif conf_dict['Step1_Mapping']['mapping_software_main'] == "bowtie2":
+            wlog('user choose bowtie2 as alignment software',logfile)
+            if sp('which bowtie2')[0].strip() == "":
+                ewlog('bowtie2 is not detected in default PATH, make sure you installed bowtie2 and export it into default PATH',logfile)
             mapping_cmd = 'bowtie2 -p %s -x %s -U %s -S %s.sam   2>&1 >>/dev/null |tee -a %s.bowtieout'%(conf_dict['Step1_Mapping']['mapping_p'],conf_dict['Step1_Mapping']['mapindex'],conf_dict['General']['reads_file'],conf_dict['General']['outname'],conf_dict['General']['outname'])
             rwlog(mapping_cmd,logfile)
             

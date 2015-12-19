@@ -68,7 +68,7 @@ def parse_args():
 
     ### generate config file
     template_parser = sub_parsers.add_parser("gen",  help = "generate a template of config file",
-                                             description = "Drseq config file generation")
+                                             description = "Drseq config file generation. Usage: Drseq.py gen  -n config_name.conf")
     template_parser.add_argument("-n","--name", dest="config_name",required = True,help="name of your config file : config_name.conf")
 
     ### run config file
@@ -80,11 +80,9 @@ def parse_args():
                              help = "The pipeline will over write output result if the output folder is already exist " )
     pipe_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
                              help = "remove intermediate result generated during Dr.seq,default is YES" )
-    pipe_parser.add_argument("--dryrun",dest='dryrun' , default=False, action='store_true',
-                             help = "Only print ALL cmd with out processing if set, default False" )
     ### simple mode
     simple_parser = sub_parsers.add_parser("simple", help = "run Drseq using simple mode",
-                                         description = "(Run Drseq pipeline using simple mode/command line mode) Usage: Drseq.py -a barcode.fastq -b reads.fastq -n outname -s mm10 -g mm10_refgenes.txt --mapindex /yourmapindexfolder/mm10.star")
+                                         description = "(Run Drseq pipeline using simple mode/command line mode) Usage: Drseq.py -a barcode.fastq -b reads.fastq -n outname --maptool STAR -g mm10_refgenes.txt --mapindex /home/user/STAR_index")
     simple_parser.add_argument("-b","--barcode", dest = 'barcode',required = True,
                              help = "[required] barcode fastq file before any filtering step, only accept .fastq format" )
     simple_parser.add_argument("-r","--reads",dest='reads',required = True,
@@ -92,9 +90,9 @@ def parse_args():
     simple_parser.add_argument("-n","--name", dest="name",required = True,
                              help="[required] name of you config file and output dir, name only , no extension. The output files will be named like name.pdf, name.txt ... ")
     simple_parser.add_argument("--cellbarcodelength",dest='CBL' ,default='12', 
-                             help = "specify the length of yoru cell barcode , default is 12, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
+                             help = "specify the length of your cell barcode , default is 12, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("--umilength",dest='UMIL',  default='8', 
-                             help = "specify the length of yoru UMI , default is 8, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
+                             help = "specify the length of your UMI , default is 8, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("-g","--gene_annotation",dest='GA', required = False,
                              help = "[required if you didn't specific it in template config file] gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
     simple_parser.add_argument("--maptool",dest='maptool' , choices = ("STAR", "bowtie2"),default="STAR", 

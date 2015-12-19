@@ -416,7 +416,8 @@ traindata <- Ndata
 
 ### select high variance gene
 highvargene <- selct_high_var_gene(traindata,hvZ)
-
+ 
+maxKnum <- min(maxKnum, ncol(Rdata) -21)
 
 ### normalize data and conduct PCA
 indata <- traindata[highvargene , ]

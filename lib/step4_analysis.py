@@ -30,7 +30,7 @@ def step4_analysis(conf_dict,logfile):
     analysis part
     mainly Rscript
     dimentional reduction + clustering
-    '''
+    '''   
     # start
     # create section for 
     t = time.time()

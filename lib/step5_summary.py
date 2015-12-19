@@ -96,7 +96,7 @@ Table 1 mainly describe the input file and mapping and analysis parameters.
         q30filter = "False"
     if int(conf_dict['Step2_ExpMat']['filterttsdistance']) == 1:
         filtertts = "True"
-    else:
+    else: 
         filtertts = "False"
     if int(conf_dict['Step2_ExpMat']['umidis1']) == 1:
         umidis1 = "True"
@@ -201,7 +201,7 @@ cluster method & DBScan (eps=%s) \\\\"""%(conf_dict['Step4_Analysis']['custom_d'
 \\newpage
 \\newpage
 \section{Reads level QC}
-In the reads level QC step we measured the quality of sequencing reads, including nucleotide quality and composition. In the reads level QC step and Bulk-cell level QC step we used a published package called ``RseQC" for reference.(Wang, L., Wang, S. and Li, W. (2012) )
+In the reads level QC step we measured the quality of sequencing reads, including nucleotide quality and composition. In the reads level QC step and Bulk-cell level QC step we randomly sampled down total reads to 5 million and used a published package called ``RseQC" for reference.(Wang, L., Wang, S. and Li, W. (2012) )
 \subsection{Reads quality}
 \\begin{quotation}
 Reads quality is one of the basic reads level quality control methods. We plotted the distribution of a widely used Phred Quality Score at every position of sequence. Phred Quality Score was calculate by a python function $ord(Q) - 33$. Color in the heatmap represented frequency of this quality score observed at this position. Red represented higher frequency while blue was lower frequency.     

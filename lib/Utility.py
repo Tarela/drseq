@@ -2,7 +2,7 @@
 """
 
 Function declare:
-
+ 
 def CMD                  (cmd)
 def sp                   (cmd)
 def sperr                (cmd)
@@ -11,7 +11,7 @@ def detect_memory        ()
 def pdf_name             (input_name)
 def wlog                 (message,logfile)
 def ewlog                (message,logfile)
-def rwlog                (message,logfile,dryrun)
+def rwlog                (message,logfile)
 def readAnnotation       (annotation)
 def textformat           (inp)
 def createDIR            (dirname)
@@ -642,12 +642,17 @@ def readsqc(SDsamfile,outname):
     for i in range(seqlen+1):
         GCsummary[i] = 0
     for line in inf:
+        if line.startswith("@"):
+            continue
         if line.strip() == "":
             continue
         ll = line.split()
         if len(ll) < 11:
             continue
-        flag = bin(int(ll[1]))[2:]
+        try:
+            flag = bin(int(ll[1]))[2:]
+        except:
+            continue
         if len(flag) < 5:
             if len(flag) < 3:
                 strand = "+"

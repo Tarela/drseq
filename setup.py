@@ -40,7 +40,7 @@ def check_R():
         return 0
     else:
         return 1       
-def main():
+def main(): 
     if sys.version_info[0] != 2 or sys.version_info[1] < 7:
 	    print >> sys.stderr, "ERROR: Dr.seq requires Python 2.7"
 	    sys.exit()
