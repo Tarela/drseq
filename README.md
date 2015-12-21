@@ -8,10 +8,12 @@ Quick start: Get you start and familiar with Dr.seq within 3 steps,
     1.Install,
     2.Download annoatation,
     3.Run
+
 Manual: Full manual including
     1.Installation of Dr.seq,
     2.Preparation of Dr.seq related data and package,
     3.Usage of 2 mode of Dr.seq,
     4.Description of all changeable parameter
+
 FAQ: frequently asked question (Email me if you have additional question, I'll add to the FAQ list.)
 
