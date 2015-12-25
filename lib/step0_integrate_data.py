@@ -39,9 +39,13 @@ def step0_integrate_data(conf_dict,logfile):
     if "/" in conf_dict['General']['outname']:
         ewlog("outname is the name of all your output result, cannot contain "/", current outname is  %s"%(conf_dict['General']['outname']),logfile)
     ### check data path , format ,
-    if not "/" in conf_dict['General']['barcode_file'].strip("/"):
+    if "~" in conf_dict['General']['barcode_file']:
+        ewlog('require absolute path for barcode file, barcode file cannot contain "~", current barcode file is %s'%(conf_dict['General']['barcode_file']),logfile)
+    if "~" in conf_dict['General']['reads_file']:
+        ewlog('require absolute path for reads file, reads file cannot contain "~", current reads file is %s'%(conf_dict['General']['reads_file']),logfile)
+    if not conf_dict['General']['barcode_file'].startswith('/'):
         conf_dict['General']['barcode_file'] = conf_dict['General']['startdir'] + conf_dict['General']['barcode_file']
-    if not "/" in conf_dict['General']['reads_file'].strip("/"):
+    if not conf_dict['General']['reads_file'].startswith('/'):
         conf_dict['General']['reads_file'] = conf_dict['General']['startdir'] + conf_dict['General']['reads_file']
     
     if not os.path.isfile(conf_dict['General']['barcode_file']):
@@ -49,7 +53,7 @@ def step0_integrate_data(conf_dict,logfile):
     if not os.path.isfile(conf_dict['General']['reads_file']):
         ewlog("reads file %s not found"%(conf_dict['General']['reads_file']),logfile)
         
-    
+
     if not conf_dict['General']['barcode_file'].endswith('.fastq') :
         if conf_dict['General']['barcode_file'].endswith('.txt'):
             wlog('barcode file is reformed txt file',logfile)
@@ -61,7 +65,7 @@ def step0_integrate_data(conf_dict,logfile):
     if conf_dict['General']['reads_file'].endswith('.fastq') or conf_dict['General']['reads_file'].endswith('.fq'):
         conf_dict['General']['format'] = 'fastq'
         wlog('Detected input file format is fastq',logfile)
-    elif conf_dict['General']['reads_file'].endswith('.sam'):
+    elif conf_dict['General']['reads_file'].endswith('.sam'): 
         conf_dict['General']['format'] = 'sam'
         wlog('Detected input file format is sam',logfile)
     else:

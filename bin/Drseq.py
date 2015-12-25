@@ -63,7 +63,7 @@ def parse_args():
     Read parameter 
     '''
     description = "Dr.seq -- a quality control and analysis pipeline for droplet sequencing"
-    parser = ChiLinParser(description = description, version = "Dr.seq 1.0 2015121")
+    parser = ChiLinParser(description = description, version = "Dr.seq 1.0.2 20151223")
     sub_parsers = parser.add_subparsers(help = "sub-command help", dest = "sub_command")
 
     ### generate config file
@@ -79,7 +79,7 @@ def parse_args():
     pipe_parser.add_argument("-f","--force_overwrite",dest='fover',  default=False, action='store_true', 
                              help = "The pipeline will over write output result if the output folder is already exist " )
     pipe_parser.add_argument("--clean",dest='Clean' , default=False, action='store_true',
-                             help = "remove intermediate result generated during Dr.seq,default is YES" )
+                             help = "remove intermediate result generated during Dr.seq,default is NO" )
     ### simple mode
     simple_parser = sub_parsers.add_parser("simple", help = "run Drseq using simple mode",
                                          description = "(Run Drseq pipeline using simple mode/command line mode) Usage: Drseq.py -a barcode.fastq -b reads.fastq -n outname --maptool STAR -g mm10_refgenes.txt --mapindex /home/user/STAR_index")
@@ -157,7 +157,7 @@ def main():
         sys.exit(1)
     if not conf_dict['General']['outputdirectory'].endswith('/'):
         conf_dict['General']['outputdirectory'] += '/'
-    if not "/" in conf_dict['General']['outputdirectory'].rstrip("/"):
+    if not conf_dict['General']['outputdirectory'].startswith('/'):
         conf_dict['General']['outputdirectory'] = conf_dict['General']['startdir'] + conf_dict['General']['outputdirectory']
     
     ### creat output dir

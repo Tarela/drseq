@@ -510,7 +510,7 @@ summary QC report & %s \\\\
 \end{tabularx}
 \end{table} 
 \end{document} 
-"""%(strlatexformat(conf_dict['results']['clusterresult'].split("/")[-1]),conf_dict['General']['outname']+"\_summary.pdf")
+"""%(strlatexformat(conf_dict['results']['clusterresult'].split("/")[-1]),strlatexformat(conf_dict['General']['outname'])+"\_summary.pdf")
 
     os.chdir(plot_folder)
 
