@@ -470,7 +470,42 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
 \end{figure}
  
 """%(conf_dict['QCplots']['cluster'].split("/")[-1])
+
+    QCdoc += """
+\\newpage
+\\newpage
+\subsection{Silhouette of clustering}
+\\begin{quotation}
+Silhouette method was used to interpretate and validate the consistency within clusters defined in previous steps.  
+\end{quotation}
+\\begin{figure}[h]
+        \caption{Clustering plot} \label{fig:profileunion}
+        \setlength{\\abovecaptionskip}{0pt}
+        \setlength{\\belowcaptionskip}{10pt}
+        \centering
+        {\includegraphics[width=0.8\\textwidth]{%s}}
+\end{figure}
+ 
+"""%(conf_dict['QCplots']['silhouette'].split("/")[-1])
     
+    QCdoc += """
+\\newpage
+\\newpage
+\subsection{Clustering plot}
+\\begin{quotation}
+STAMPs was by the total number of UMI based on t-SNE visualization. 
+\end{quotation}
+\\begin{figure}[h]
+        \caption{Clustering plot} \label{fig:profileunion}
+        \setlength{\\abovecaptionskip}{0pt}
+        \setlength{\\belowcaptionskip}{10pt}
+        \centering
+        {\includegraphics[width=0.8\\textwidth]{%s}}
+\end{figure}
+ 
+"""%(conf_dict['QCplots']['umicolor'].split("/")[-1])
+    
+   
     QCdoc += """
 \\newpage
 \\newpage
@@ -486,10 +521,7 @@ All output files were described in the following table
 description & filename \\\\
 \hline
 expression matrix for selected STAMPs & %s  \\\\
-\hline
-QC measurements for selected STAMPs & %s \\\\
-"""%(strlatexformat(conf_dict['results']['expmatcc'].split("/")[-1]),
-     strlatexformat(conf_dict['results']['qcmatcc'].split("/")[-1]))
+"""%(strlatexformat(conf_dict['results']['expmatcc'].split("/")[-1]))
     if int(conf_dict['Step4_Analysis']['pctable']) == 1:
         QCdoc += """
 \hline
@@ -502,7 +534,7 @@ pairwise correlation matrix & %s \\\\
 """%(strlatexformat(conf_dict['results']['cortable'].split("/")[-1]))
     QCdoc += """
 \hline
-t-SNE dimentional reduction and clustering result & %s \\\\
+All features of selected STAMPs & %s \\\\
 \hline
 summary QC report & %s \\\\
 \hline
@@ -510,7 +542,7 @@ summary QC report & %s \\\\
 \end{tabularx}
 \end{table} 
 \end{document} 
-"""%(strlatexformat(conf_dict['results']['clusterresult'].split("/")[-1]),strlatexformat(conf_dict['General']['outname'])+"\_summary.pdf")
+"""%(strlatexformat(conf_dict['results']['features'].split("/")[-1]),strlatexformat(conf_dict['General']['outname'])+"\_summary.pdf")
 
     os.chdir(plot_folder)
 

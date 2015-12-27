@@ -64,7 +64,8 @@ def main():
               package_data={'Drseqpipe': ['Config/Drseq_template.conf',
                                       'Rscript/analysis.r',
                                       'Rscript/individual_qc.r',
-                                      'Rscript/readsbulkQC.r'
+                                      'Rscript/readsbulkQC.r',
+                                      'Rscript/post_analysis.r'
                                          ]},
               scripts=['bin/Drseq.py','refpackage/bedtools/bin/bedtools'],
                         
@@ -94,7 +95,8 @@ def main():
               package_data={'Drseqpipe': ['Config/Drseq_template.conf',
                                       'Rscript/analysis.r',
                                       'Rscript/individual_qc.r',
-                                      'Rscript/readsbulkQC.r'
+                                      'Rscript/readsbulkQC.r',
+                                      'Rscript/post_analysis.r'
                                          ]},
               scripts=['bin/Drseq.py'],
                         

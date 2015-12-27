@@ -149,7 +149,7 @@ intergenic UMI count\t%s
         conf_dict['QCplots']['umicovergn'] = qcdir + conf_dict['General']['outname'] + '_Figure7_umi_coverGN.pdf'
         conf_dict['QCplots']['cumumiduprate'] = qcdir + conf_dict['General']['outname'] + '_Figure6_cumUMI_duprate.pdf'        
  
-    conf_dict['results']['qcmatcc'] = qcdir + conf_dict['General']['outname'] + "_qcmat_clustercell.txt" 
+    #conf_dict['results']['qcmatcc'] = qcdir + conf_dict['General']['outname'] + "_qcmat_clustercell.txt" 
     conf_dict['results']['expmatcc'] = qcdir + conf_dict['General']['outname'] + "_expmat_clustercell.txt" 
 
     if int(conf_dict['Step3_QC']['select_cell_measure']) ==1:
