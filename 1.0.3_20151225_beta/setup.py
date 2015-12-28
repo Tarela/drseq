@@ -54,7 +54,7 @@ def main():
     if has_bedtools == 0:
         compile_bedtools()
         setup(name="Drseqpipe",
-              version="1.0",
+              version="1.0.3",
               description="Drseq: Drop-seq QC and analysis pipeline",
               author='Shengen Hu',
               author_email='Tarelahu@gmail.com',
