@@ -94,7 +94,7 @@ def parse_args():
     simple_parser.add_argument("--umilength",dest='UMIL',  default='8', 
                              help = "specify the length of your UMI , default is 8, 12(cellbarcode) + 8(umi) = 20 (barcodefastq)" )
     simple_parser.add_argument("-g","--gene_annotation",dest='GA', required = False,
-                             help = "[required if you didn't specific it in template config file] gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
+                             help = "[required absolute path if you didn't specific it in template config file] gene annotation file, the annotation file can be download from UCSC, full annotation text format(see documents for detail), or users can download gene annotation file in hg38 and mm10 version from our homepage" )
     simple_parser.add_argument("--maptool",dest='maptool' , choices = ("STAR", "bowtie2"),default="STAR", 
                              help = "choose mapping software for alignment, default is STAR, you can also choose bowtie2 as another option. mapping tool should corresponded to mapindex, STAR vs. STAR index, bowtie2 vs. bowtie2 index. Dr.seq will check your total memory if you choose STAR, becuse STAR consumes huge memory for mapping though fast. If you don't have 40G for total memory and choose STAR, Dr.seq will exit to protect your server/computer. you can also turn off the checkmem option to run STAR direclty" )
     simple_parser.add_argument("--checkmem",dest='checkmem' , choices = ("0", "1"), default="1",

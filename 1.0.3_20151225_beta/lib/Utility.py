@@ -187,8 +187,8 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
             else:
                 strand = "+"
         if q30 == 1 and int(mapQ) < 30:
-            totalN += 1
             continue
+        totalN += 1
         newll = [chrom,start,end,txname,'255',strand]
         outbed.write("\t".join(map(str,newll))+"\n")
     outbed.close()
@@ -224,7 +224,6 @@ def sample_down_transform_sam(samfile,outBed,sampledown_sam,sampledown_bed,sampl
             else:
                 strand = "+"
         if q30 == 1 and int(mapQ) < 30:
-            totalN += 1
             continue
         if random.randint(1,10000) <= p:
             outSDsam.write(line)
