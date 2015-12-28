@@ -7,25 +7,29 @@ outname <- a[3]
 use_cluster_mat <- cluster_mat[which(cluster_mat[,3]>0),]
 unuse_cluster_mat <- cluster_mat[which(cluster_mat[,3]==0),]
 silhouette_evaluate <- function(clusmat){
-C <- clusmat[,3]
-D <- dist(clusmat[,1:2])
-return(silhouette(C,D))
+    C <- clusmat[,3]
+    D <- dist(clusmat[,1:2])
+    return(silhouette(C,D))
 }
 silScore <- silhouette_evaluate(use_cluster_mat)
 
-use_cluster_mat_sil <- cbind(use_cluster_mat,silScore[,'sil_width'])
+if (is.na(silScore)){
+    use_cluster_mat_sil <- cbind(use_cluster_mat,rep('NA',nrow(use_cluster_mat)))
+}else{
+    use_cluster_mat_sil <- cbind(use_cluster_mat,silScore[,'sil_width'])
+    pdf(file=paste(outname,"_Figure12_silhouetteScore.pdf",sep=""))
+    plot(silScore,main="Silhouette score for clustered STAMPs")
+    dev.off()
+}
 colnames(use_cluster_mat_sil)[4] <- 'silhouette' 
 if(nrow(unuse_cluster_mat) == 0){
-cluster_mat_sil  <- use_cluster_mat_sil[rownames(cluster_mat),]
+    cluster_mat_sil  <- use_cluster_mat_sil[rownames(cluster_mat),]
 }else{
-unuse_cluster_mat_sil <- cbind(unuse_cluster_mat,rep('NA',nrow(unuse_cluster_mat)))
-colnames(unuse_cluster_mat_sil)[4] <- 'silhouette' 
-cluster_mat_sil <- rbind(use_cluster_mat_sil,unuse_cluster_mat_sil)[rownames(cluster_mat),]
+    unuse_cluster_mat_sil <- cbind(unuse_cluster_mat,rep('NA',nrow(unuse_cluster_mat)))
+    colnames(unuse_cluster_mat_sil)[4] <- 'silhouette' 
+    cluster_mat_sil <- rbind(use_cluster_mat_sil,unuse_cluster_mat_sil)[rownames(cluster_mat),]
 }
 
-pdf(file=paste(outname,"_Figure12_silhouetteScore.pdf",sep=""))
-plot(silScore,main="Silhouette score for clustered STAMPs")
-dev.off()
 
 
 use_qc_mat <- qc_mat[rownames(cluster_mat_sil),]
@@ -47,14 +51,14 @@ layout(matrix(data=c(1,2), nrow=2, ncol=1), heights=c(4,1))
 par(mar = c(4,4,2.5,2))
 plot(cluster_mat_sil[,1:2],xlab="t-SNE 1",ylab="t-SNE 2",main="STAMPs colored by total UMI count",pch=20,cex=0,col="grey")
 for ( k in 1:length(v) ){
-  points(cluster_mat_sil[k,1],cluster_mat_sil[k,2],col=ColorRamp[v[k]],pch=20,cex=1.5)
+    points(cluster_mat_sil[k,1],cluster_mat_sil[k,2],col=ColorRamp[v[k]],pch=20,cex=1.5)
 }
 par(mar = c(4,4,1.5,2))
 image(ColorLevels,1,
-      matrix(data=ColorLevels, nrow=length(ColorLevels),ncol=1),
-      col=ColorRamp,
-      xlab="log10(total UMI count)",ylab="",
-      yaxt="n")
+    matrix(data=ColorLevels, nrow=length(ColorLevels),ncol=1),
+    col=ColorRamp,
+    xlab="log10(total UMI count)",ylab="",
+    yaxt="n")
 dev.off()
 
 outmat <- cbind(cluster_mat_sil,use_qc_mat)

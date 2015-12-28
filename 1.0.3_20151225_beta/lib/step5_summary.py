@@ -470,8 +470,8 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
 \end{figure}
  
 """%(conf_dict['QCplots']['cluster'].split("/")[-1])
-
-    QCdoc += """
+    if os.path.isfile(conf_dict['QCplots']['silhouette']):
+        QCdoc += """
 \\newpage
 \\newpage
 \subsection{Silhouette of clustering}
