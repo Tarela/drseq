@@ -563,7 +563,7 @@ summary QC report & %s \\\\
                     rwlog(cmd,logfile)
         wlog('pdflatex was detected in default PATH, generate summary report %s'%('summary/'+conf_dict['General']['outname'] + '_summary.pdf'),logfile)
     else:
-        wlog('pdflatex was not detected in default PATH, generate summary report .tex file in summary/plots folder, you can move the whole folder to the environment with pdflatex installed and run cmd: "pdflatex %s"'%(conf_dict['General']['outname'] + '_summary.tex'),logfile)
+        wlog('pdflatex was not detected in default PATH, generate summary report .tex file in summary/plots folder, you can move the whole summary/plots/ folder to the environment with pdflatex installed and run cmd in the plots/ folder: "pdflatex %s"'%(conf_dict['General']['outname'] + '_summary.tex'),logfile)
    
         
     if conf_dict['clean']:

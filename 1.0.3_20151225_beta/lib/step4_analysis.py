@@ -57,7 +57,6 @@ def step4_analysis(conf_dict,logfile):
     analysisqctime = time.time() - t
     wlog("time for analysis qc: %s"%(analysisqctime),logfile)
     wlog("Step4 analysis QC DONE",logfile)
-    analysisqctime = time.time()-t
     
     return conf_dict
 
