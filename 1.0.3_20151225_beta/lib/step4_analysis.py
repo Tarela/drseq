@@ -52,7 +52,7 @@ def step4_analysis(conf_dict,logfile):
     
     cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%('Rscript',conf_dict['rscript']+'analysis.r',conf_dict['results']['expmatcc'],conf_dict['General']['outname'],conf_dict['Step4_Analysis']['highvarz'],conf_dict['Step4_Analysis']['selectpccumvar'],conf_dict['Step4_Analysis']['rdnumber'],conf_dict['Step4_Analysis']['maxknum'],conf_dict['Step4_Analysis']['pctable'],conf_dict['Step4_Analysis']['cortable'],conf_dict['Step4_Analysis']['clustering_method'],conf_dict['Step4_Analysis']['custom_k'],conf_dict['Step4_Analysis']['custom_d'])
     rwlog(cmd,logfile)
-    cmd = '%s %s %s %s %s'%('Rscript',conf_dict['rscript']+'post_analysis.r',conf_dict['Step4_Analysis']['clusterresult'],conf_dict['results']['qcmatcc'],conf_dict['General']['outname'])
+    cmd = '%s %s %s %s %s'%('Rscript',conf_dict['rscript']+'post_analysis.r',conf_dict['Step4_Analysis']['clusterresult'],conf_dict['Step2_ExpMat']['qcmatcc'],conf_dict['General']['outname'])
     rwlog(cmd,logfile)
     wlog("time for analysis qc: %s"%(analysisqctime),logfile)
     wlog("Step4 analysis QC DONE",logfile)
