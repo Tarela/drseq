@@ -46,6 +46,7 @@ def step4_analysis(conf_dict,logfile):
     conf_dict['QCplots']['cluster'] = analysisdir + conf_dict['General']['outname']+'_Figure11_cluster.pdf'
     conf_dict['QCplots']['silhouette'] = analysisdir + conf_dict['General']['outname']+'_Figure12_silhouetteScore.pdf'
     conf_dict['QCplots']['umicolor'] = analysisdir + conf_dict['General']['outname']+'_Figure13_totalUMIcolored.pdf'
+    conf_dict['QCplots']['itrcolor'] = analysisdir + conf_dict['General']['outname']+'_Figure14_intronRate_colored.pdf'
     conf_dict['results']['pctable'] = analysisdir + conf_dict['General']['outname']+'_pctable.txt'    
     conf_dict['results']['cortable'] = analysisdir + conf_dict['General']['outname']+'_correlation_table.txt' 
     conf_dict['results']['features'] = analysisdir + conf_dict['General']['outname']+'_features_clustercell.txt'

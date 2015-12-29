@@ -479,7 +479,7 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
 Silhouette method was used to interpretate and validate the consistency within clusters defined in previous steps.  
 \end{quotation}
 \\begin{figure}[h]
-        \caption{Clustering plot} \label{fig:profileunion}
+        \caption{Silhouette score for clustered STAMPs} \label{fig:profileunion}
         \setlength{\\abovecaptionskip}{0pt}
         \setlength{\\belowcaptionskip}{10pt}
         \centering
@@ -491,12 +491,12 @@ Silhouette method was used to interpretate and validate the consistency within c
     QCdoc += """
 \\newpage
 \\newpage
-\subsection{Clustering plot}
+\subsection{STAMPs colored by total UMI count}
 \\begin{quotation}
 STAMPs was by the total number of UMI based on t-SNE visualization. 
 \end{quotation}
 \\begin{figure}[h]
-        \caption{Clustering plot} \label{fig:profileunion}
+        \caption{STAMPs colored by total UMI count} \label{fig:profileunion}
         \setlength{\\abovecaptionskip}{0pt}
         \setlength{\\belowcaptionskip}{10pt}
         \centering
@@ -504,8 +504,24 @@ STAMPs was by the total number of UMI based on t-SNE visualization.
 \end{figure}
  
 """%(conf_dict['QCplots']['umicolor'].split("/")[-1])
-    
    
+    QCdoc += """
+\\newpage
+\\newpage
+\subsection{STAMPs colored by intron rate}
+\\begin{quotation}
+STAMPs was by the intron rate based on t-SNE visualization. 
+\end{quotation}
+\\begin{figure}[h]
+        \caption{STAMPs colored by intron rate} \label{fig:profileunion}
+        \setlength{\\abovecaptionskip}{0pt}
+        \setlength{\\belowcaptionskip}{10pt}
+        \centering
+        {\includegraphics[width=0.8\\textwidth]{%s}}
+\end{figure}
+ 
+"""%(conf_dict['QCplots']['itrcolor'].split("/")[-1])
+      
     QCdoc += """
 \\newpage
 \\newpage
