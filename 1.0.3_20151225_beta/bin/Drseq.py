@@ -145,15 +145,24 @@ def main():
     conf_dict = read_conf(args.config)
     ### read raw path of output dir, the startdir will be used when the input file is not in absolute path
     conf_dict['General']['startdir'] = os.getcwd()+'/'
-    
+
     ### check output name and dir from input parameter
     if conf_dict['General']['outname'] == "":
         print 'your outname cannot be left blank,exit'
         sys.exit(1)
+    if "." in conf_dict['General']['outname']:
+        oldname = conf_dict['General']['outname']
+        newname = oldname.replace(".","-")
+        conf_dict['General']['outname'] = newname
+        print 'replace outname from %s to %s for latex summary'%(oldname,newname)
     if conf_dict['General']['outputdirectory'] == "":
         conf_dict['General']['outputdirectory'] = conf_dict['General']['outname']
+        print 'output directory is blank, use outname as directory name and set output directory in current folder'
+    if "~" in conf_dict['General']['outname']:
+        print 'ERROR: ~ cannot appeared in outname, current outname is %s'%(conf_dict['General']['outname'])
+        sys.exit(1)
     if "~" in conf_dict['General']['outputdirectory']:
-        print 'require absolute path for outputdirectory'
+        print 'ERROR: require absolute path for outputdirectory'
         sys.exit(1)
     if not conf_dict['General']['outputdirectory'].endswith('/'):
         conf_dict['General']['outputdirectory'] += '/'
@@ -162,17 +171,18 @@ def main():
     
     ### creat output dir
     if os.path.isfile(conf_dict['General']['outputdirectory'].rstrip("/")):
-        print 'name of your output dir is exist as a file, cannot create a dir,Dr.seq exit'
+        print 'ERROR: name of your output dir is exist as a file, cannot create a dir,Dr.seq exit'
         sys.exit(1)
     elif os.path.isdir(conf_dict['General']['outputdirectory']):
         if not args.fover:
-            print 'name of your output dir is exist as a dir, Dr.seq exit because overwrite function is turned off, you can add -f parameter to turn on overwite function'
+            print 'ERROR: name of your output dir is exist as a dir, Dr.seq exit because overwrite function is turned off, you can add -f parameter to turn on overwite function'
             sys.exit(1)
         else: 
             print 'name of your output dir is exist as a dir, overwrite is turned on, write output result in existing dir'
     else:
-		os.system("mkdir %s"%(conf_dict['General']['outputdirectory']))
-     
+        os.system("mkdir %s"%(conf_dict['General']['outputdirectory']))
+
+    
     ### move to output dir
     os.chdir(conf_dict['General']['outputdirectory'])
     ## cp config file to output folder
