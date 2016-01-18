@@ -424,7 +424,10 @@ def reform_barcode_fastq(fq,reformtxt,cbL,umiL):
         if count%4 == 3:
             pass
         if count%4 == 0:
-            newll = [head, seq[:cbL], seq[cbL:lastL]]
+            if cbL == lastL:
+                newll = [head,seq[:cbL],"NA"]
+            else:
+                newll = [head, seq[:cbL], seq[cbL:lastL]]
             outf.write("\t".join(newll)+"\n")
     
     outf.close()
