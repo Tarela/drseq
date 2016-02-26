@@ -204,7 +204,7 @@ cluster method & DBScan (eps=%s) \\\\"""%(conf_dict['Step4_Analysis']['custom_d'
 In the reads level QC step we measured the quality of sequencing reads, including nucleotide quality and composition. In the reads level QC step and Bulk-cell level QC step we randomly sampled down total reads to 5 million and used a published package called ``RseQC" for reference.(Wang, L., Wang, S. and Li, W. (2012) )
 \subsection{Reads quality}
 \\begin{quotation}
-Reads quality is one of the basic reads level quality control methods. We plotted the distribution of a widely used Phred Quality Score at every position of sequence. Phred Quality Score was calculate by a python function $ord(Q) - 33$. Color in the heatmap represented frequency of this quality score observed at this position. Red represented higher frequency while blue was lower frequency.     
+Reads quality is one of the basic reads level quality control methods. We plotted the distribution of a widely used Phred Quality Score at every position of sequence to measure the basic sequence quality of your data. Phred Quality Score was calculate by a python function $ord(Q) - 33$. Color in the heatmap represented frequency of this quality score observed at this position. Red represented higher frequency while blue was lower frequency. Users may observe a decreasing of quality near the 3'end of sequence because of general degradation of quality over the duration of long runs. If the decreasing of quality influence the mappability(see ``Bulk-cell level QC") then the common remedy is to perform quality trimming where reads are truncated based on their average quality or you can trim serveal base pair near 3'end directly. If it doesn't help, then users may consider re-sequence your samples. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads quality} \label{fig:profileunion}
@@ -218,7 +218,7 @@ Reads quality is one of the basic reads level quality control methods. We plotte
 \\newpage
 \subsection{Reads nucleotide composition}
 \\begin{quotation}
-We assessed the nucleotide composition bias of a sample. The proportion of four different nucleotides was calculated at each position of reads. Theoretically four nucleotides had similar proportion at each position of reads. For Drop-seq sample we observed higher A count at the 3'end of reads, because of the 3'end polyA tail generated in sequencing cDNA libaray.
+We assessed the nucleotide composition bias of a sample. The proportion of four different nucleotides was calculated at each position of reads. Theoretically four nucleotides had similar proportion at each position of reads. You may observe higher A/T count at 3'end of reads because of the 3'end polyA tail generated in sequencing cDNA libaray, otherwise the A/T count should be closer to C/G count. In any case, users should observe a stable pattern at least in the 3'end of reads. Spikes(un-stable pattern) which occur in the middle or tail of the reads indicate low sequence quality. Users can trim serveral un-stable bases from the 3'end if low mappability(see ``Bulk-cell level QC") is also observed. If it doesn't help, then users may consider re-sequence your samples. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads nucleotide composition} \label{fig:profileunion}
@@ -232,7 +232,7 @@ We assessed the nucleotide composition bias of a sample. The proportion of four 
 \\newpage
 \subsection{Reads GC content}
 \\begin{quotation}
-Distribution of GC content of each read. 
+Distribution of GC content of each read. This module measures the general quality of the library. If the distribution looks different from a single bell(too sharp or too broad) then there may be a problem with the library. Sharp peaks on an otherwise smooth distribution are normally the result of a specific contaminant (adapter dimers for example), which may well be picked up by the overrepresented sequences module. Broader peaks may represent contamination with a different species. If users get sharp peak or broder peak and also observe low mappability (see ``Bulk-cell level QC"), you may consider reconstruct your library(redo the experiment).
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads GC content} \label{fig:profileunion}
@@ -253,7 +253,7 @@ Distribution of GC content of each read.
 In the bulk-cell level QC step we measured the performance of total Drop-seq reads. In this step we did't separate cell or remove ``empty" cell barcodes, just like treated the sample as bulk RNA-seq sample.
 \subsection{Reads alignment summary}
 \\begin{quotation}
-The following table shows mappability and distribution of total Drop-seq reads. Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. \\\\
+The following table shows mappability and distribution of total Drop-seq reads. It measures the general quality of data as a RNA-seq sample. Low mappability indicates poor sequence quality(see ``Reads level QC") or library quality(caused by contaminant). High duplicate rate (low total UMI percentage observed, e.g. $<$ 10\\%%) indicate insufficient RNA material and Overamplification. In summary, if the ``total UMI count" is less than 10 million or the percentage is less than 5\\%%, users may consider reconstruct your library(redo the experiment), but first you should make sure you already trim the adapter and map your reads to the corresponded species(genome version). Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. \\\\
 ** the percentage was calculated by dividing total reads number \\\\
 *** the percentage was calculated by divding total UMI number
 \end{quotation}
@@ -304,7 +304,7 @@ intergenic UMI count & %s (%s\\%%)** \\\\
 \\newpage
 \subsection{Gene body coverage}
 \\begin{quotation}
-Aggregate plot of reads coverage on all genes. Theoretically we observe a unimodal(single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end because of the CEL-seq like protocol used in sequencing cDNA library. (Klein, A.M., et al. (2015) )
+Aggregate plot of reads coverage on all genes. This module measures the general quality of data as a RNA-seq sample. Theoretically we observe a unimodal(single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end because of the CEL-seq like protocol used in sequencing cDNA library. (Klein, A.M., et al. (2015) ). In any case users should observed a smooth distritbuion. If loss of reads or spike were observed in certain part of gene body (e.g. middle or 3'end of gene body), poor quality of your library was indicated. You may consider reconstruct your library if low mappability and high intron rate were also observed (see ``Reads alignment summary" section).
 \end{quotation}
 \\begin{figure}[h]
         \caption{Gene body coverage} \label{fig:profileunion}
@@ -323,7 +323,7 @@ Aggregate plot of reads coverage on all genes. Theoretically we observe a unimod
 In this step we focused on the quality of individual cell and distinguishing cell barcodes from STAMPs (single-cell transcriptomes attached to microparticles)
 \subsection{Reads duplicate rate distribution}
 \\begin{quotation}
-Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. Here we plotted the distribution of duplicate rate in each cell barcode (though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate.
+Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. This module displays the distribution of duplicate rate in each cell barcode and helps to discard cell barcodes with low duplicate rate (which usually caused by empty cell barcodes and ambient RNA). We plotted the distribution of duplicate rate in each cell barcode (though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate. Users can adjust the cutoff and rerun Dr.seq if current cutoff didn't separate two peaks from the distribution clearly (usually happened with insufficient sequencing depth). If the distribution didn't show clear bimodal or you don't want to discard cell barcodes according to duplicate rate, you can set cutoff to 0 to keep all cell barcodes. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads dupliate rate distribution} \label{fig:profileunion}
@@ -339,7 +339,7 @@ Drop-seq technology has an innate advantage of detect duplicate reads and amplif
 \\newpage
 \subsection{Reads duplicate rate vs. cumulative covered gene number}
 \\begin{quotation}
-Reads duplicate rate versus cumulative covered gene numbers. Cell barcodes were ranked by the number of covered genes. The duplicate rate (y-axis, left side) was plotted as a function of ranked cell barcode. Red curve represented the number of genes covered by top N cell barcodes (y-axis, right side). N was showed by x-axis. 
+Reads duplicate rate versus cumulative covered gene numbers. This module measures whether each of your single cell was sequenced and was clearly separated from empty cell barcodes. Cell barcodes were ranked by the number of covered genes. The duplicate rate (y-axis, left side) was plotted as a function of ranked cell barcode. Red curve represented the number of genes covered by top N cell barcodes (y-axis, right side). N was showed by x-axis. Theoretically you will observed a ``knee" on your cumulative curve (slope $=$ 1 on the curve) and the cutoff of your selected STAMPs (dash line) should be close to the ``knee". The cutoff could be far away from the ``knee" in some cases because users input too many cells and have insufficient sequencing depth, then users should adjust your cutoff (to the position you get enough STAMPs and sufficient reads count) and rerun Dr.seq. See the description of the paramter ``select cell measure" in the Manual.
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads duplicate rate vs. cumulative covered gene number} \label{fig:profileunion}
@@ -353,7 +353,7 @@ Reads duplicate rate versus cumulative covered gene numbers. Cell barcodes were 
 \\newpage
 \subsection{UMI vs. covered gene number}
 \\begin{quotation}
-Covered gene number was plotted as a function of the number of UMI (i.e. unique read). We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis.Note that we use only STAMPs selected in this step for following analysis. The other cell barcodes are discarded. 
+Covered gene number was plotted as a function of the number of UMI (i.e. unique read). This module measures the quality of Drop-seq experiment and helps to distinguish STAMPs from empty cell barcodes. We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis. By default we select STAMPs with 1000 gene covered after discarding low duplicate cell barcodes. You might get few STAMPs according to this cutoff because of low sequencing depth and too many cells inputed. In this case you can adjust your cutoff or tell Dr.seq to directly select cell barcodes with highest reads count (see the description of the parameter ``select cell measure"). Otherwise you may have to redo the experiment. Note that we use only STAMPs selected in this step for following analysis. The other cell barcodes are discarded. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{UMI v.s. covered gene number} \label{fig:profileunion}
@@ -370,7 +370,7 @@ Covered gene number was plotted as a function of the number of UMI (i.e. unique 
 \\newpage
 \subsection{Reads duplicate rate vs. cumulative covered gene number}
 \\begin{quotation}
-Reads duplicate rate versus cumulative UMI count. Cell barcodes were ranked by the number of UMI count. The duplicate rate (y-axis, left side) was plotted as a function of ranked cell barcode. Red curve represented cumulative UMI number from top N cell barcodes (y-axis, right side). N was showed by x-axis. 
+Reads duplicate rate versus cumulative UMI count. This module measures whether each of your single cell was sequenced and was clearly separated from empty cell barcodes. Cell barcodes were ranked by the number of UMI count. The duplicate rate (y-axis, left side) was plotted as a function of ranked cell barcode. Red curve represented cumulative UMI number from top N cell barcodes (y-axis, right side). N was showed by x-axis. Theoretically you will observed a ``knee" on your cumulative curve (slope $=$ 1 on the curve) and the cutoff of your selected STAMPs (dash line) should be close to the ``knee". The cutoff could be far away from the ``knee" in some cases because users input too many cells and have insufficient sequencing depth, then users should adjust your cutoff (to the position you get enough STAMPs and sufficient reads count) and rerun Dr.seq. See the description of the paramter ``select cell measure" in the Manual.
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads duplicate rate vs. cumulative covered gene number} \label{fig:profileunion}
@@ -384,7 +384,7 @@ Reads duplicate rate versus cumulative UMI count. Cell barcodes were ranked by t
 \\newpage
 \subsection{UMI vs. covered gene number}
 \\begin{quotation}
-Covered gene number was plotted as a function of the number of UMI (i.e. unique read). We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis.Note that we used only STAMPs selected in this step for following analysis. The other cell barcodes were discarded. 
+Covered gene number was plotted as a function of the number of UMI (i.e. unique read). This module measures the quality of Drop-seq experiment and helps to distinguish STAMPs from empty cell barcodes. We observed a clearly different pattern for two groups of cell barcodes with different reads duplicate rate (blue dots versus red and purple dots). Purple dots represented the selected STAMPs for the cell-clustering analysis. By default we select STAMPs with 1000 gene covered after discarding low duplicate cell barcodes. You might get few STAMPs according to this cutoff because of low sequencing depth and too many cells inputed. In this case you can adjust your cutoff or tell Dr.seq to directly select cell barcodes with highest reads count (see the description of the parameter ``select cell measure"). Otherwise you may have to redo the experiment. Note that we use only STAMPs selected in this step for following analysis. The other cell barcodes are discarded. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{UMI v.s. covered gene number} \label{fig:profileunion}
@@ -401,7 +401,7 @@ Covered gene number was plotted as a function of the number of UMI (i.e. unique 
 \\newpage
 \subsection{Covered gene number distribution}
 \\begin{quotation}
-Histogram of covered gene number of selected STAMPs
+Histogram of covered gene number of selected STAMPs. The module tell users whether the selected STAMPs have sufficient reads coverage. By default Dr.seq select STAMPs with cell barcodes with $>=$ 1000 genes covered. If you select STAMPs with highest reads count (``select cell measure" $=$ 2), then you should check this figure to make sure the STAMPs you select have enough gene covered. If most of your STAMPs have low covered gene number (e.g. $<$ 100 gene covered), you can make your cutoff more stringent (e.g. select less cell barcodes with higher reads count) to make sure you get reliable STAMPs from empty cell barcodes.
 \end{quotation}
 \\begin{figure}[h]
         \caption{Covered gene number} \label{fig:profileunion}
@@ -415,7 +415,7 @@ Histogram of covered gene number of selected STAMPs
 \\newpage
 \subsection{Intron rate distribution}
 \\begin{quotation}
-Intron rate is a effective method to measure the quality of a RNA-seq sample. We plotted a histogram of intron rate of every STAMP barcodes. Intron rate was defined as $\\frac{intron\\ reads\\ number}{intron + exon\\ reads\\ number}$ 
+Intron rate is a effective method to measure the quality of a RNA-seq sample. We plotted a histogram of intron rate of every STAMP barcodes to check whether reads from each STAMPs enriched in the exon region. High intron rate (e.g. $>=$ 30\\%%) indicates low quality of cDNA in each STAMPs (the low quality could be caused by different problem, for example contaminant). We suggest redo the Drop-seq experiment if most of selected STAMPs have high intron rate and low covered gene number (see ``Covered gene number distribution" section). Intron rate was defined as $\\frac{intron\\ reads\\ number}{intron + exon\\ reads\\ number}$ 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Intron rate distribution} \label{fig:profileunion}
@@ -442,7 +442,7 @@ Intron rate is a effective method to measure the quality of a RNA-seq sample. We
 This step composed by k-means clustering based on t-SNE dimentional reduction result and Gap statistics to determine best k.
 \subsection{Gap statistics}
 \\begin{quotation}
-We conducted a k-means clustering based on t-SNE dimentional reduction output. Gap statistics followed by the ``%s" method was performed to determine the best k in k-means clustering (to determine how many groups the data should have). 
+We conducted a k-means clustering based on t-SNE dimentional reduction output to measure sample's ability to be separated to different cell subtypes. Gap statistics followed by the ``%s" method was performed to determine the best k in k-means clustering (to determine how many groups the data should have). In general, decreasing pattern (usually k $<=$ 2) is observed for pure cell type or cell line data, while increasing pattern with bigger k should be observed for mix cell types (or cell subtypes) data. If the cluster number predicted from the Gap statistics is different from what you expect, you can also specify the cluster number with the parameter ``custom k". However, we suggest to use predicted number of cluster because some of small subtypes were not even captured by Drop-seq experiment. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Gap statistics} \label{fig:profileunion}
@@ -459,7 +459,7 @@ We conducted a k-means clustering based on t-SNE dimentional reduction output. G
 \\newpage
 \subsection{Clustering plot}
 \\begin{quotation}
-Scatter plot represented visualization of t-SNE dimensional reduction output of selected STAMP barcodes. STAMP barcodes were colored according to the clustering result and cluster numbers were printed in the center of each cluster. 
+Scatter plot represented visualization of t-SNE dimensional reduction output of selected STAMP barcodes. STAMP barcodes were colored according to the clustering result and cluster numbers were printed in the center of each cluster. This figure is mainly for visualization and help users to know how their data looked like. If you want to combine some small groups which are close to each other, you can use the cluster matrix (named ``cluster.txt") Dr.seq provided to conduct your own analysis.   
 \end{quotation}
 \\begin{figure}[h]
         \caption{Clustering plot} \label{fig:profileunion}
@@ -476,7 +476,7 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
 \\newpage
 \subsection{Silhouette of clustering}
 \\begin{quotation}
-Silhouette method was used to interpretate and validate the consistency within clusters defined in previous steps.  
+Silhouette method was used to interprate and validate the consistency within clusters defined in previous steps. A poor Silhouette (e.g. average si $<$ 0.2 ) score indicate that Drop-seq experiments(if not properly done) may not separate well the subpopulations of cells. Then you may consider remove certain clusters. If most of your clusters have poor Silhouette score, it may indicate a poor quality of your Drop-seq experiments and you should redo the Drop-seq experiments with refined protocol. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Silhouette score for clustered STAMPs} \label{fig:profileunion}
@@ -488,39 +488,39 @@ Silhouette method was used to interpretate and validate the consistency within c
  
 """%(conf_dict['QCplots']['silhouette'].split("/")[-1])
     
-    QCdoc += """
-\\newpage
-\\newpage
-\subsection{STAMPs colored by total UMI count}
-\\begin{quotation}
-STAMPs was by the total number of UMI based on t-SNE visualization. 
-\end{quotation}
-\\begin{figure}[h]
-        \caption{STAMPs colored by total UMI count} \label{fig:profileunion}
-        \setlength{\\abovecaptionskip}{0pt}
-        \setlength{\\belowcaptionskip}{10pt}
-        \centering
-        {\includegraphics[width=0.8\\textwidth]{%s}}
-\end{figure}
+#    QCdoc += """
+#\\newpage
+#\\newpage
+#\subsection{STAMPs colored by total UMI count}
+#\\begin{quotation}
+#STAMPs was by the total number of UMI based on t-SNE visualization. 
+#\end{quotation}
+#\\begin{figure}[h]
+#        \caption{STAMPs colored by total UMI count} \label{fig:profileunion}
+#        \setlength{\\abovecaptionskip}{0pt}
+#        \setlength{\\belowcaptionskip}{10pt}
+#        \centering
+#        {\includegraphics[width=0.8\\textwidth]{%s}}
+#\end{figure}
  
-"""%(conf_dict['QCplots']['umicolor'].split("/")[-1])
+#"""%(conf_dict['QCplots']['umicolor'].split("/")[-1])
    
-    QCdoc += """
-\\newpage
-\\newpage
-\subsection{STAMPs colored by intron rate}
-\\begin{quotation}
-STAMPs was by the intron rate based on t-SNE visualization. 
-\end{quotation}
-\\begin{figure}[h]
-        \caption{STAMPs colored by intron rate} \label{fig:profileunion}
-        \setlength{\\abovecaptionskip}{0pt}
-        \setlength{\\belowcaptionskip}{10pt}
-        \centering
-        {\includegraphics[width=0.8\\textwidth]{%s}}
-\end{figure}
- 
-"""%(conf_dict['QCplots']['itrcolor'].split("/")[-1])
+#    QCdoc += """
+#\\newpage
+#\\newpage
+#\subsection{STAMPs colored by intron rate}
+#\\begin{quotation}
+#STAMPs was by the intron rate based on t-SNE visualization. 
+#\end{quotation}
+#\\begin{figure}[h]
+#        \caption{STAMPs colored by intron rate} \label{fig:profileunion}
+#        \setlength{\\abovecaptionskip}{0pt}
+#        \setlength{\\belowcaptionskip}{10pt}
+#        \centering
+#        {\includegraphics[width=0.8\\textwidth]{%s}}
+#\end{figure}
+# 
+#"""%(conf_dict['QCplots']['itrcolor'].split("/")[-1])
       
     QCdoc += """
 \\newpage

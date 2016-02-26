@@ -471,6 +471,7 @@ def combine_reads(barcodeF,cdsF,utr3F,utr5F,symbolF,ttsdisF,outF,dup_measure):
                     break
         if newll == []:
             print 'error in match barcode'
+            sys.exit(1)
         last_read = newll[:8]
         if len(next_read_sym) > 3 and newll[3] == next_read_sym[3] :
             addsym_list = [next_read_sym[9]]
