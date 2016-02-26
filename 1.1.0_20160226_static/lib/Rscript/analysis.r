@@ -6,7 +6,7 @@ stable_gap_decideK <- function(indata,SD,maxK,Gapplot){
     GapK <- b$Tab[,3]
 
     Knum = 0
-    GapCUTOFF <- mean(GapK[maxK:(maxK+20)]) - 2*sd(GapK[maxK:(maxK+20)])
+    GapCUTOFF <- mean(GapK[maxK:(maxK+20)]) - 4*sd(GapK[maxK:(maxK+20)])
     for(i in seq(maxK-1)){
         if(GapK[i] > GapCUTOFF & GapK[i] > GapK[i+1]){
             Knum = i

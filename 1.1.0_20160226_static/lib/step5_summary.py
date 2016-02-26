@@ -202,6 +202,8 @@ cluster method & DBScan (eps=%s) \\\\"""%(conf_dict['Step4_Analysis']['custom_d'
 \\newpage
 \section{Reads level QC}
 In the reads level QC step we measured the quality of sequencing reads, including nucleotide quality and composition. In the reads level QC step and Bulk-cell level QC step we randomly sampled down total reads to 5 million and used a published package called ``RseQC" for reference.(Wang, L., Wang, S. and Li, W. (2012) )
+\\newpage
+\\newpage
 \subsection{Reads quality}
 \\begin{quotation}
 Reads quality is one of the basic reads level quality control methods. We plotted the distribution of a widely used Phred Quality Score at every position of sequence to measure the basic sequence quality of your data. Phred Quality Score was calculate by a python function $ord(Q) - 33$. Color in the heatmap represented frequency of this quality score observed at this position. Red represented higher frequency while blue was lower frequency. Users may observe a decreasing of quality near the 3'end of sequence because of general degradation of quality over the duration of long runs. If the decreasing of quality influence the mappability(see ``Bulk-cell level QC") then the common remedy is to perform quality trimming where reads are truncated based on their average quality or you can trim serveal base pair near 3'end directly. If it doesn't help, then users may consider re-sequence your samples. 
@@ -251,6 +253,8 @@ Distribution of GC content of each read. This module measures the general qualit
 \\newpage
 \section{Bulk-cell level QC}
 In the bulk-cell level QC step we measured the performance of total Drop-seq reads. In this step we did't separate cell or remove ``empty" cell barcodes, just like treated the sample as bulk RNA-seq sample.
+\\newpage
+\\newpage
 \subsection{Reads alignment summary}
 \\begin{quotation}
 The following table shows mappability and distribution of total Drop-seq reads. It measures the general quality of data as a RNA-seq sample. Low mappability indicates poor sequence quality(see ``Reads level QC") or library quality(caused by contaminant). High duplicate rate (low total UMI percentage observed, e.g. $<$ 10\\%%) indicate insufficient RNA material and Overamplification. In summary, if the ``total UMI count" is less than 10 million or the percentage is less than 5\\%%, users may consider reconstruct your library(redo the experiment), but first you should make sure you already trim the adapter and map your reads to the corresponded species(genome version). Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. \\\\
@@ -321,6 +325,8 @@ Aggregate plot of reads coverage on all genes. This module measures the general 
 \\newpage
 \section{Individual-cell level QC}
 In this step we focused on the quality of individual cell and distinguishing cell barcodes from STAMPs (single-cell transcriptomes attached to microparticles)
+\\newpage
+\\newpage
 \subsection{Reads duplicate rate distribution}
 \\begin{quotation}
 Drop-seq technology has an innate advantage of detect duplicate reads and amplification bias because of the barcode and UMI information. This module displays the distribution of duplicate rate in each cell barcode and helps to discard cell barcodes with low duplicate rate (which usually caused by empty cell barcodes and ambient RNA). We plotted the distribution of duplicate rate in each cell barcode (though most of cell barcodes don't contain cells, they still have RNA) and observed a bimodal distribution of duplicate rate. We set an option for users to discard cell barcodes with low duplicate rate in following steps. The vertical line represented the cutoff (duplicate rate $>=$ 0.1) of discarding cell barcodes with low duplicate rate. Users can adjust the cutoff and rerun Dr.seq if current cutoff didn't separate two peaks from the distribution clearly (usually happened with insufficient sequencing depth). If the distribution didn't show clear bimodal or you don't want to discard cell barcodes according to duplicate rate, you can set cutoff to 0 to keep all cell barcodes. 
@@ -440,6 +446,8 @@ Intron rate is a effective method to measure the quality of a RNA-seq sample. We
 \\newpage
 \section{Cell-clustering level QC}
 This step composed by k-means clustering based on t-SNE dimentional reduction result and Gap statistics to determine best k.
+\\newpage
+\\newpage
 \subsection{Gap statistics}
 \\begin{quotation}
 We conducted a k-means clustering based on t-SNE dimentional reduction output to measure sample's ability to be separated to different cell subtypes. Gap statistics followed by the ``%s" method was performed to determine the best k in k-means clustering (to determine how many groups the data should have). In general, decreasing pattern (usually k $<=$ 2) is observed for pure cell type or cell line data, while increasing pattern with bigger k should be observed for mix cell types (or cell subtypes) data. If the cluster number predicted from the Gap statistics is different from what you expect, you can also specify the cluster number with the parameter ``custom k". However, we suggest to use predicted number of cluster because some of small subtypes were not even captured by Drop-seq experiment. 
