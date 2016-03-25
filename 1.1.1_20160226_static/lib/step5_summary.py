@@ -220,7 +220,8 @@ Reads quality is one of the basic reads level quality control methods. We plotte
 \\newpage
 \subsection{Reads nucleotide composition}
 \\begin{quotation}
-We assess the nucleotide composition bias of a sample. The proportion of four different nucleotides was calculated at each position of reads. Theoretically four nucleotides had similar proportion at each position of reads. You may observe higher A/T count at 3'end of reads because of the 3'end polyA tail generated in sequencing cDNA libaray, otherwise the A/T count should be closer to C/G count. In any case, you should observe a stable pattern at least in the 3'end of reads. Spikes (un-stable pattern) which occur in the middle or tail of the reads indicate low sequence quality. You can trim serveral un-stable bases from the 3'end if low mappability (see ``Bulk-cell level QC") is also observed. If it doesn't help, you may consider your Drop-seq data poor quality. 
+We assess the nucleotide composition bias of a sample. The proportion of four different nucleotides was calculated at each position of reads. Theoretically four nucleotides had similar proportion at each position of reads. You may observe higher A/T count at 3'end of reads because of the 3'end polyA tail generated in sequencing cDNA libaray, otherwise the A/T count should be closer to C/G count. In any case, you should observe a stable pattern at least in the 3'end of reads. Spikes (un-stable pattern) which occur in the middle or tail of the reads indicate low sequence quality. You can trim serveral un-stable bases from the 3'end if low mappability (see ``Bulk-cell level QC") is also observed. If it doesn't help, you may consider your Drop-seq data poor quality. Note that t
+he A/T vs G/C content can also greatly vary from species to species. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Reads nucleotide composition} \label{fig:profileunion}
@@ -257,7 +258,7 @@ In the bulk-cell level QC step we measured the performance of total Drop-seq rea
 \\newpage
 \subsection{Reads alignment summary}
 \\begin{quotation}
-The following table shows mappability and distribution of total Drop-seq reads. It measures the general quality of data as a RNA-seq sample. Low mappability indicates poor sequence quality(see ``Reads level QC") or library quality(caused by contaminant). High duplicate rate (low total UMI percentage observed, e.g. $<$ 10\\%%) indicate insufficient RNA material and Overamplification. In summary, if the ``total UMI count" is less than 10 million or the percentage is less than 5\\%%, users may consider reconstruct your library(redo the experiment), but first you should make sure you already trim the adapter and map your reads to the corresponded species(genome version). Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. \\\\
+The following table shows mappability and distribution of total Drop-seq reads. It measures the general quality of data as a RNA-seq sample. Low mappability indicates poor sequence quality(see ``Reads level QC") or library quality(caused by contaminant). High duplicate rate (low total UMI percentage observed, e.g. $<$ 10\\%%) indicate insufficient RNA material and Overamplification. In summary, if the ``total UMI count" is less than 10 million or the percentage is less than 5\\%%, users may consider reconstruct your library(redo the experiment), but first you should make sure you already trim the adapter and map your reads to the corresponded species(genome version). Note that UMI number was calculated by removing duplicate reads (which have identical genomic location, cell barcode and UMI sequences). Mappable reads was after Q30 filtering if Q30 filter function was turned on. Note that total UMI count represent the remaining reads after remove duplicate reads considering reads locus and UMI information.\\\\
 ** the percentage was calculated by dividing total reads number \\\\
 *** the percentage was calculated by divding total UMI number
 \end{quotation}
@@ -308,7 +309,7 @@ intergenic UMI count & %s (%s\\%%)** \\\\
 \\newpage
 \subsection{Gene body coverage}
 \\begin{quotation}
-Aggregate plot of reads coverage on all genes. This module measures the general quality of the Drop-seq data. Theoretically we observe a unimodal (single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end because of the CEL-seq like protocol used in sequencing cDNA library. (Klein, A.M., et al. (2015) ). In any case you should observe a smooth distritbuion. If loss of reads or spike are observed in certain part of gene body (e.g. middle or 3'end of gene body), poor quality of your library was indicated. Especially when low mappability and high intron rate are also observed (see ``Reads alignment summary" section).
+Aggregate plot of reads coverage on all genes. This module measures the general quality of the Drop-seq data. Theoretically we observe a unimodal (single bell) distribution, but for Drop-seq sample we observed an enrichment at 3'end due to library preparation using oligo-dT primers. In any case you should observe a smooth distritbuion. If loss of reads or spike are observed in certain part of gene body (e.g. middle or 3'end of gene body), poor quality of your library was indicated. Especially when low mappability and high intron rate are also observed (see ``Reads alignment summary" section).
 \end{quotation}
 \\begin{figure}[h]
         \caption{Gene body coverage} \label{fig:profileunion}
@@ -484,7 +485,7 @@ Scatter plot represented visualization of t-SNE dimensional reduction output of 
 \\newpage
 \subsection{Silhouette of clustering}
 \\begin{quotation}
-Silhouette method is used to interprate and validate the consistency within clusters defined in previous steps. A poor Silhouette (e.g. average si $<$ 0.2 ) score indicate that Drop-seq experiments(if not properly done) may not separate well the subpopulations of cells. Then you may consider remove certain clusters. If most of your clusters have poor Silhouette score, it may indicate a poor quality of your Drop-seq experiments. 
+Silhouette method is used to interprate and validate the consistency within clusters defined in previous steps. A poor Silhouette (e.g. average si $<$ 0.2 ) score indicate that Drop-seq experiments(if not properly done) may not separate well the subpopulations of cells. If most of your clusters have poor Silhouette score, it may indicate a poor quality of your Drop-seq experiments. 
 \end{quotation}
 \\begin{figure}[h]
         \caption{Silhouette score for clustered STAMPs} \label{fig:profileunion}
