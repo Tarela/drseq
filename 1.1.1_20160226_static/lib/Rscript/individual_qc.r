@@ -138,7 +138,7 @@ dev.off()
 real_qcdata <- qcdata[cluster_cell_name,]
 real_expdata <- expdata[,cluster_cell_name]
 
-intron_exon_ratio <- real_qcdata[,'intron']/(real_qcdata[,'utr3']+real_qcdata[,'utr5']+real_qcdata[,'cds']+real_qcdata[,'intron'])
+intron_exon_ratio <- (real_qcdata[,'intron']+1)/(real_qcdata[,'utr3']+real_qcdata[,'utr5']+real_qcdata[,'cds']+real_qcdata[,'intron']+1)
 
 pdf(file=paste(outname,"_Figure9_intronrate.pdf",sep=""))
 hist(intron_exon_ratio,n=200,border="blue",xlab="Intron rate",main="")
