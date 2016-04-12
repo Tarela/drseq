@@ -104,7 +104,9 @@ if(measure == 1){
     names(cs_coverGN) <- cell_coverGN_order
     cs_coverGN_mat <- cbind(seq(length(cs_coverGN)),(cs_coverGN)/nrow(expdata))
     duprate_mat <- cbind(seq(length(cs_coverGN)),(duprate[names(cs_coverGN)]))
-    smoothScatter(duprate_mat,transformation = function(x) x^2,xlab="Cell barcodes ordered by covered gene number from high to low",ylab="Reads duplicate rate")
+    #smoothScatter(duprate_mat,transformation = function(x) x^2,xlab="Cell barcodes ordered by covered gene number from high to low",ylab="Reads duplicate rate")
+    smoothScatter(duprate_mat,xlab="Cell barcodes ordered by covered gene number from high to low",ylab="Reads duplicate rate")
+
     abline_cutoff <- length(which(coverGN >= measure_cutoff))
     abline(v=abline_cutoff,col="purple",lwd=2,lty=2)
     par(new=T)
