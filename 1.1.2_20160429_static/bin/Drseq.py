@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Time-stamp: <2016-02-28 13:11:14 Shengen Hu>
+# Time-stamp: <2016-04-29 Shengen Hu>
 """
  <Dr.seq: quality control and analysis for Drop-seq>
     Copyright (C) <2016>  <Shengen Hu>
@@ -79,7 +79,7 @@ def parse_args():
     Read parameter 
     '''
     description = "Dr.seq -- a quality control and analysis pipeline for droplet sequencing"
-    parser = ChiLinParser(description = description, version = "Dr.seq 1.1.1 20160401")
+    parser = ChiLinParser(description = description, version = "Dr.seq 1.1.2 20160429")
     sub_parsers = parser.add_subparsers(help = "sub-command help", dest = "sub_command")
 
     ### generate config file
