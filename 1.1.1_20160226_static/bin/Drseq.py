@@ -125,8 +125,8 @@ def parse_args():
                              help = "remove intermediate result generated during Dr.seq,default is No" )
     simple_parser.add_argument("--select_cell_measure",dest='select_cell_measure' , choices = ("1", "2"), default="1",
                              help = "Method to select STAMPs from cell_barcodes, choose from 1 or 2 (default is 1), 1: Cell_barcodes with more than 1000 genes covered are selected. 2: Top 1000 cell_harcodes with highest umi count will be selected" )
-    simple_parser.add_argument("--remove_low_dup_cell",dest='remove_low_dup_cell' , choices = ("0", "1"), default="1",
-                             help = "discard cell barcodes with low duplicate rate (< 0.1), set 1 (default) to turn on this function, set 0 to turn off. May not effective for samples with low sequencing depth" )
+    simple_parser.add_argument("--remove_low_dup_cell",dest='remove_low_dup_cell' , choices = ("0", "1"), default="0",
+                             help = "discard cell barcodes with low duplicate rate (< 0.1), set 1 to turn on this function, set 0 (default) to turn off. May not effective for samples with low sequencing depth" )
 
     args = parser.parse_args()
     ## generate config file template 
