@@ -102,7 +102,7 @@ Table 1 mainly describe the input file and mapping and analysis parameters.
         umidis1 = "True"
     else:
         umidis1 = "False"
-    if int(conf_dict['Step3_QC']['remove_non_dup_cell']) == 1:
+    if int(conf_dict['Step3_QC']['remove_low_dup_cell']) == 1:
         rmnodup = "True"
     else:
         rmnodup = "False"

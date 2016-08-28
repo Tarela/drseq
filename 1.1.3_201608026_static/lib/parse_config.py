@@ -90,8 +90,8 @@ def make_conf(barcode_file,reads_file,outname,fover,cellbarcodeL,umiL,geneanno,P
             newline = 'mapping_p = ' + str(P) + '\n'
         elif line.startswith('select_cell_measure ='):
             newline = 'select_cell_measure = ' + str(select_cell) + '\n'
-        elif line.startswith('remove_non_dup_cell ='):
-            newline = 'remove_non_dup_cell = ' + str(remove_lowdup) + '\n'
+        elif line.startswith('remove_low_dup_cell ='):
+            newline = 'remove_low_dup_cell = ' + str(remove_lowdup) + '\n'
 
         else:
             newline = line

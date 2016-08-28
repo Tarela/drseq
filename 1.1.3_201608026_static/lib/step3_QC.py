@@ -160,7 +160,7 @@ intergenic UMI count\t%s
     else:
         ewlog('select_cell_measure value can only be 1 or 2, current value is %s'%(conf_dict['Step4_Analysis']['select_cell_measure']),logfile)
 
-    cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%('Rscript',conf_dict['rscript']+'individual_qc.r',conf_dict['Step2_ExpMat']['qcmat'],conf_dict['Step2_ExpMat']['expmat'],conf_dict['General']['outname'],conf_dict['Step3_QC']['select_cell_measure'],use_cutoff,conf_dict['Step3_QC']['remove_non_dup_cell'],conf_dict['Step3_QC']['non_dup_cutoff'],conf_dict['Mapping_stat']['umi_gene'],conf_dict['Step2_ExpMat']['qcmatcc'],conf_dict['Step2_ExpMat']['expmatcc'],conf_dict['General']['png_for_dot'])
+    cmd = "%s %s %s %s %s %s %s %s %s %s %s %s %s"%('Rscript',conf_dict['rscript']+'individual_qc.r',conf_dict['Step2_ExpMat']['qcmat'],conf_dict['Step2_ExpMat']['expmat'],conf_dict['General']['outname'],conf_dict['Step3_QC']['select_cell_measure'],use_cutoff,conf_dict['Step3_QC']['remove_low_dup_cell'],conf_dict['Step3_QC']['non_dup_cutoff'],conf_dict['Mapping_stat']['umi_gene'],conf_dict['Step2_ExpMat']['qcmatcc'],conf_dict['Step2_ExpMat']['expmatcc'],conf_dict['General']['png_for_dot'])
     rwlog(cmd,logfile)
     individualqctime = time.time() -t
     wlog("time for individualqc: %s"%(individualqctime),logfile)

@@ -154,8 +154,8 @@ def step0_integrate_data(conf_dict,logfile):
     else: 
         ewlog('select_cell_measure value can only be 1 or 2, current value is %s'%(conf_dict['Step3_QC']['select_cell_measure']),logfile)
 
-    if not int(conf_dict['Step3_QC']['remove_non_dup_cell']) in [0,1]:
-        ewlog('remove_non_dup_cell measurement can only be 0/1, current value is %s'%(conf_dict['Step3_QC']['remove_non_dup_cell']),logfile)
+    if not int(conf_dict['Step3_QC']['remove_low_dup_cell']) in [0,1]:
+        ewlog('remove_low_dup_cell measurement can only be 0/1, current value is %s'%(conf_dict['Step3_QC']['remove_low_dup_cell']),logfile)
     if float(conf_dict['Step3_QC']['non_dup_cutoff']) <= 0  or float(conf_dict['Step3_QC']['non_dup_cutoff']) >=1 :
         ewlog('non_dup_cutoff measurement should be in 0~1, current value is %s'%(conf_dict['Step3_QC']['non_dup_cutoff']),logfile)
     if float(conf_dict['Step4_Analysis']['highvarz']) <= 0  :
